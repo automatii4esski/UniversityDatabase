@@ -1,4 +1,4 @@
-﻿@model UniversityDatabase.Models.Dean
+﻿@model UniversityDatabase.ViewModels.Dean.DeanCreateViewModel
 
 <h2 class="info-title">Создать Деканаты</h2>
     <hr />
@@ -6,14 +6,14 @@
         <form class="form form-create" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label">Название</label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Dean.Name" class="control-label">Название</label>
+                <input asp-for="Dean.Name" class="form-control" />
+                <span asp-validation-for="Dean.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label">Телефон</label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
+                <label asp-for="Dean.Phone" class="control-label">Телефон</label>
+                <input asp-for="Dean.Phone" class="form-control" />
+                <span asp-validation-for="Dean.Phone" class="text-danger"></span>
             </div>
             <div style="margin-top:10px;" class="form-group box">
                 <input type="submit" value="Create" class="btn btn-success" />

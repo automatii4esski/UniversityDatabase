@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using UniversityDatabase.Data;
 using UniversityDatabase.Models;
-using UniversityDatabase.ViewModels;
+using UniversityDatabase.ViewModels.Dean;
 
 namespace UniversityDatabase.Controllers
 {

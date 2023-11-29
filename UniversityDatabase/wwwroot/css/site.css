@@ -60,3 +60,44 @@ body {
     display:flex;
     justify-content:center;
 }
+
+
+@keyframes alert-show{
+    0% {
+        transform: translate(-50%, -100%);
+        top:0;
+    }
+
+    100% {
+        transform: translate(-50%, 0);
+        top: 15px;
+    }
+}
+
+@keyframes alert-hide {
+    0% {
+        transform: translate(-50%, 0);
+        top: 15px;
+    }
+
+    100% {
+        transform: translate(-50%, -100%);
+        top: 0;
+    }
+}
+
+.alert {
+    position: absolute;
+    padding: 15px;
+    background: red;
+    color: #fff;
+    left: 50%;
+    top: 0;
+    z-index: 10;
+    transform: translate(-50%, -100%);
+    animation: alert-show 0.7s forwards;
+}
+
+.alert-hide {
+    animation: alert-hide 0.7s forwards;
+}

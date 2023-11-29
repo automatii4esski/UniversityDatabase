@@ -1,0 +1,49 @@
+﻿@model UniversityDatabase.ViewModels.Faculty.FacultyCreateViewModel
+
+<h2 class="info-title">Редактировать Факультет</h2>
+    <hr />
+        <form class="form form-create" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Faculty.Name" class="control-label">Название</label>
+                <input value="@Model.Faculty.Name" asp-for="Faculty.Name" class="form-control" />
+                <span asp-validation-for="Faculty.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Faculty.Phone" class="control-label">Телефон</label>
+                <input value="@Model.Faculty.Phone" asp-for="Faculty.Phone" class="form-control" />
+                <span asp-validation-for="Faculty.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Faculty.DeanId" class="control-label">Деканат</label>
+                <select class="form-select" asp-for="Faculty.DeanId">
+                    <option hidden selected value="">Select</option>
+                    
+                        @foreach (var dean in Model.DeansOptions)
+                        {
+                            if ( Model.Faculty.Dean.Id == dean.Key)
+                            {
+                                <option selected value="@dean.Key" >@dean.Value</option>
+                            }
+                            else{
+                                 <option value="@dean.Key" >@dean.Value</option>
+                            }
+                        }
+                </select>
+                <span asp-validation-for="Faculty.DeanId" class="text-danger"></span>
+            </div>
+            
+            <div style="margin-top:10px;" class="form-group box">
+                <input type="submit" value="Edit" class="btn btn-success" />
+            </div>
+        </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

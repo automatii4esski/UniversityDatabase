@@ -1,10 +1,12 @@
 ﻿
 
+
 namespace UniversityDatabase.ViewModels.Dean
 {
     using UniversityDatabase.Models;
-    public class DeanIndexViewModel
+
+    public class DeanCreateViewModel
     {
-        public List<Dean> Deans { get; set; } = new List<Dean>();
+        public Dean Dean { get; set; } = new();
     }
 }

@@ -22,6 +22,6 @@ namespace UniversityDatabase.Models
 
         [Column("faculty_id")]
         public int FacultyId { get; set; }
-        public Faculty Faculty { get; set; } = new();
+        public Faculty Faculty { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model UniversityDatabase.ViewModels.Dean.DeanIndexViewModel;
+﻿@model UniversityDatabase.ViewModels.Faculty.FacultyIndexViewModel;
 
 @{
     string cellCssWidth = $"{90/2}%";
@@ -6,7 +6,7 @@
 
 
 <div>
-    <h2 class="info-title">Деканаты</h2>
+    <h2 class="info-title">Факультеты</h2>
     <hr />
     <div class="box">
 
@@ -18,13 +18,13 @@
             <div style="width:@cellCssWidth" class="info-cell">Phone</div>
             <div class="info-cell info-cell-actions">Actions</div>
         </div>
-    @foreach(Dean dean in Model.Deans){
+    @foreach(Faculty faculty in Model.Faculties){
         <div class="info-row">
-                <div style="width:@cellCssWidth" class="info-cell">@dean.Name</div>
-                <div style="width:@cellCssWidth" class="info-cell">@dean.Phone</div>
+                <div style="width:@cellCssWidth" class="info-cell">@faculty.Name</div>
+                <div style="width:@cellCssWidth" class="info-cell">@faculty.Phone</div>
                     <div class="info-cell info-cell-actions">
-                            <a asp-action="Edit" asp-route-id="@dean.Id" class="btn btn-warning">Edit</a>
-                            <form asp-route-id="@dean.Id" asp-action="Delete">
+                            <a asp-action="Edit" asp-route-id="@faculty.Id" class="btn btn-warning">Edit</a>
+                            <form asp-route-id="@faculty.Id" asp-action="Delete">
                                         <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                                 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -22,6 +23,6 @@ namespace UniversityDatabase.Models
 
         [Column("dean_id")]
         public int DeanId { get; set; }
-        public Dean Dean { get; set; } = new();
+        public Dean Dean { get; set; }
     }
 }
