@@ -1,13 +1,25 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UniversityDatabase.Data;
+using UniversityDatabase.Seed;
 
 namespace UniversityDatabase.Controllers
 {
     public class StudentController : Controller
     {
+        private MyDbContext _dbContext;
+
+        public StudentController(MyDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         // GET: StudentController
         public ActionResult Index()
         {
+            MySeed mySeed = new MySeed(_dbContext);
+
+            mySeed.CreateCourses();
             return View();
         }
 
@@ -21,6 +33,11 @@ namespace UniversityDatabase.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+
+        public ActionResult CreateCourses()
+        {
+            return View("Create");
         }
 
         // POST: StudentController/Create

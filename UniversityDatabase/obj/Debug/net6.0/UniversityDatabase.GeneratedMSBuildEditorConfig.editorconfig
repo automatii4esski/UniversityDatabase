@@ -15,6 +15,18 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\sssr_\Desktop\c#\UniversityDatabase\UniversityDatabase
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/sssr_/Desktop/c\#/UniversityDatabase/UniversityDatabase/Views/Dean/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVhblxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sssr_/Desktop/c\#/UniversityDatabase/UniversityDatabase/Views/Dean/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVhblxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sssr_/Desktop/c\#/UniversityDatabase/UniversityDatabase/Views/Dean/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVhblxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/sssr_/Desktop/c\#/UniversityDatabase/UniversityDatabase/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
