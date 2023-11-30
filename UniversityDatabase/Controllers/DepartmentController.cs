@@ -20,7 +20,15 @@ namespace UniversityDatabase.Controllers
 
         public ActionResult Index()
         {
-            var departmentList = _dbContext.Departments.ToList();
+
+            var departmentList = _dbContext.Departments.Select(d =>
+            new Department
+            {
+                Id = d.Id,
+                Name = d.Name,
+                Phone = d.Phone,
+                Faculty = new Faculty { Name = d.Faculty.Name, Dean = new Dean { Name = d.Faculty.Dean.Name } },
+            }).ToList();
 
             var deprtmentViewModel = new DepartmentIndexViewModel { Departments = departmentList };
 
@@ -57,10 +65,9 @@ namespace UniversityDatabase.Controllers
         {
             var department = _dbContext.Departments.Find(id);
 
-            var facultyOptions = _dbContext.Faculties.ToDictionary(d => d.Id, d => d.Name);
-
-
             if (department == null) return RedirectToAction(nameof(Index));
+
+            var facultyOptions = _dbContext.Faculties.ToDictionary(d => d.Id, d => d.Name);
 
             var departmentViewModel = new DepartmentCreateViewModel { Department = department, FacultyOptions = facultyOptions };
 

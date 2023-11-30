@@ -1,7 +1,7 @@
 ﻿@model UniversityDatabase.ViewModels.Department.DepartmentIndexViewModel;
 
 @{
-    string cellCssWidth = $"{90 / 2}%";
+    string cellCssWidth = $"{90 / 4}%";
 } 
 
 
@@ -16,13 +16,17 @@
     <div class="info-row info-row-title">
             <div style="width:@cellCssWidth" class="info-cell">Name</div>
             <div style="width:@cellCssWidth" class="info-cell">Phone</div>
+            <div style="width:@cellCssWidth" class="info-cell">Faculty</div>
+            <div style="width:@cellCssWidth" class="info-cell">Dean</div>
             <div class="info-cell info-cell-actions">Actions</div>
         </div>
-    @foreach (Department department in Model.Departments)
+    @foreach (var department in Model.Departments)
     {
             <div class="info-row">
                     <div style="width:@cellCssWidth" class="info-cell">@department.Name</div>
                     <div style="width:@cellCssWidth" class="info-cell">@department.Phone</div>
+                    <div style="width:@cellCssWidth" class="info-cell">@department.Faculty.Name</div>
+                    <div style="width:@cellCssWidth" class="info-cell">@department.Faculty.Dean.Name</div>
                         <div class="info-cell info-cell-actions">
                                 <a asp-action="Edit" asp-route-id="@department.Id" class="btn btn-warning">Edit</a>
                                 <form asp-route-id="@department.Id" asp-action="Delete">

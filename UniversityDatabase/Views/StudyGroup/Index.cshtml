@@ -1,0 +1,40 @@
+﻿@model UniversityDatabase.ViewModels.StudyGroup.StudyGroupIndexViewModel;
+
+@{
+    string cellCssWidth = $"{90 / 4}%";
+} 
+
+
+<div>
+    <h2 class="info-title">Учебные группы</h2>
+    <hr />
+    <div class="box">
+
+    <a class="btn btn-primary" asp-action="Create">Создать</a>
+    </div>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Name</div>
+            <div style="width:@cellCssWidth" class="info-cell">Course</div>
+            <div style="width:@cellCssWidth" class="info-cell">RecruitmentYear</div>
+            <div style="width:@cellCssWidth" class="info-cell">Faculty</div>
+            <div class="info-cell info-cell-actions">Actions</div>
+        </div>
+    @foreach (var studyGroup in Model.StudyGroups)
+    {
+                <div class="info-row">
+                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.Name</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.Course.Number</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.RecruitmentYear</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.Faculty.Name</div>
+                            <div class="info-cell info-cell-actions">
+                                    <a asp-action="Edit" asp-route-id="@studyGroup.Id" class="btn btn-warning">Edit</a>
+                                    <form asp-route-id="@studyGroup.Id" asp-action="Delete">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+
+                            </div>
+                </div>
+    }
+
+</div>

@@ -23,6 +23,6 @@ namespace UniversityDatabase.Models
 
         [Column("dean_id")]
         public int DeanId { get; set; }
-        public Dean Dean { get; set; }
+        public virtual Dean Dean { get; set; }
     }
 }

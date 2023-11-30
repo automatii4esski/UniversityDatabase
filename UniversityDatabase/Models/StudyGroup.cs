@@ -21,11 +21,11 @@ namespace UniversityDatabase.Models
 
         [Column("course_id")]
         public byte CourseId { get; set; }
-        public Course Course { get; set; }
+        public virtual Course Course { get; set; }
 
 
         [Column("faculty_id")]
         public int FacultyId { get; set; }
-        public Faculty Faculty { get; set; }
+        public virtual Faculty Faculty { get; set; }
     }
 }

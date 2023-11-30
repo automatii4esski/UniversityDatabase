@@ -1,0 +1,71 @@
+﻿@model UniversityDatabase.ViewModels.StudyGroup.StudyGroupCreateViewModel;
+
+<h2 class="info-title">Редактировать Учебную группу</h2>
+    <hr />
+        <form class="form form-create" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input value="@Model.StudyGroup.Id" type="hidden" asp-for="StudyGroup.Id" />
+            <div class="form-group">
+                <label asp-for="StudyGroup.Name" class="control-label">Название</label>
+                <input value="@Model.StudyGroup.Name" asp-for="StudyGroup.Name" class="form-control" />
+                <span asp-validation-for="StudyGroup.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudyGroup.RecruitmentYear" class="control-label">Год набора</label>
+                <input type="number" min="1900" value="@Model.StudyGroup.RecruitmentYear" asp-for="StudyGroup.RecruitmentYear" class="form-control" />
+                <span asp-validation-for="StudyGroup.RecruitmentYear" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="StudyGroup.FacultyId" class="control-label">Факультет</label>
+                <select class="form-select" asp-for="StudyGroup.FacultyId">
+                    <option hidden selected value="">Select</option>
+
+            @foreach (var faculty in Model.FacultyOptions)
+            {
+                if (Model.StudyGroup.FacultyId == faculty.Key)
+                {
+                               <option selected value="@faculty.Key" >@faculty.Value</option>
+                }
+                else
+                {
+                                <option value="@faculty.Key" >@faculty.Value</option>
+                }
+            }
+                </select>
+                <span asp-validation-for="StudyGroup.FacultyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudyGroup.CourseId" class="control-label">Курс</label>
+                <select class="form-select" asp-for="StudyGroup.CourseId">
+                    <option hidden selected value="">Select</option>
+
+            @foreach (var course in Model.CourseOptions)
+            {
+                if (Model.StudyGroup.CourseId == course.Key)
+                {
+                                               <option selected value="@course.Key" >@course.Value</option>
+                }
+                else
+                {
+                                                <option value="@course.Key" >@course.Value</option>
+                }
+            }
+                </select>
+                <span asp-validation-for="StudyGroup.CourseId" class="text-danger"></span>
+            </div>
+
+            <div style="margin-top:10px;" class="form-group box">
+                <input type="submit" value="Edit" class="btn btn-success" />
+            </div>
+        </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

@@ -4,6 +4,8 @@
     <hr />
         <form class="form form-create" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input value="@Model.Faculty.Id" type="hidden" asp-for="Faculty.Id" />
+
             <div class="form-group">
                 <label asp-for="Faculty.Name" class="control-label">Название</label>
                 <input value="@Model.Faculty.Name" asp-for="Faculty.Name" class="form-control" />
@@ -21,7 +23,7 @@
                     
                         @foreach (var dean in Model.DeansOptions)
                         {
-                            if ( Model.Faculty.Dean.Id == dean.Key)
+                            if ( Model.Faculty.DeanId == dean.Key)
                             {
                                 <option selected value="@dean.Key" >@dean.Value</option>
                             }

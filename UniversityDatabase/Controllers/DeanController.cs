@@ -15,7 +15,6 @@ namespace UniversityDatabase.Controllers
             _dbContext = dbContext;
         }
 
-        // GET: DeanController
         public ActionResult Index()
         {
             var deansList = _dbContext.Deans.ToList();
@@ -25,41 +24,32 @@ namespace UniversityDatabase.Controllers
             return View(deanViewModel);
         }
 
-        // GET: DeanController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: DeanController/Create
         public ActionResult Create()
         {
-            return View();
+            var deanViewModel = new DeanCreateViewModel();
+            return View(deanViewModel);
         }
 
-        // POST: DeanController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Dean dean)
         {
-            if (!ModelState.IsValid) return RedirectToAction(nameof(Create));
-
             _dbContext.Deans.Add(dean);
             _dbContext.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: DeanController/Edit/5
         public ActionResult Edit(int id)
         {
            var dean = _dbContext.Deans.Find(id);
 
             if (dean == null)return RedirectToAction(nameof(Index));
 
-            return View(dean);
+            var deanViewModel = new DeanCreateViewModel { Dean = dean };
+
+            return View(deanViewModel);
         }
 
-        // POST: DeanController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Dean dean)

@@ -53,10 +53,10 @@ namespace UniversityDatabase.Controllers
         {
            var faculty = _dbContext.Faculties.Find(id);
 
+            if (faculty == null)return RedirectToAction(nameof(Index));
+
             var densOptions = _dbContext.Deans.ToDictionary(d => d.Id, d => d.Name);
 
-
-            if (faculty == null)return RedirectToAction(nameof(Index));
 
             var facultyViewModel = new FacultyCreateViewModel { Faculty = faculty, DeansOptions = densOptions };
 
