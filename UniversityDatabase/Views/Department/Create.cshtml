@@ -1,0 +1,41 @@
+﻿@model UniversityDatabase.ViewModels.Department.DepartmentCreateViewModel;
+
+<h2 class="info-title">Создать Кафедру</h2>
+    <hr />
+        <form class="form form-create" method="post" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Department.Name" class="control-label">Название</label>
+                <input asp-for="Department.Name" class="form-control" />
+                <span asp-validation-for="Department.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Department.Phone" class="control-label">Телефон</label>
+                <input asp-for="Department.Phone" class="form-control" />
+                <span asp-validation-for="Department.Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Department.FacultyId" class="control-label">Деканат</label>
+                <select class="form-select" asp-for="Department.FacultyId">
+                    <option hidden selected value="">Select</option>
+            @foreach (var faculty in Model.FacultyOptions)
+            {
+                            <option value="@faculty.Key">@faculty.Value</option>
+            }
+                </select>
+                <span asp-validation-for="Department.FacultyId" class="text-danger"></span>
+            </div>
+            <div style="margin-top:10px;" class="form-group box">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
