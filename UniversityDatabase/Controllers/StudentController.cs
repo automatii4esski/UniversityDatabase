@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniversityDatabase.Data;
+using UniversityDatabase.Models;
 using UniversityDatabase.Seed;
+using UniversityDatabase.ViewModels.Student;
+using UniversityDatabase.ViewModels.StudyGroup;
 
 namespace UniversityDatabase.Controllers
 {
@@ -14,87 +17,96 @@ namespace UniversityDatabase.Controllers
             _dbContext = dbContext;
         }
 
-        // GET: StudentController
         public ActionResult Index()
         {
-            MySeed mySeed = new MySeed(_dbContext);
+            var studentList = _dbContext.Students.Select(s =>
+            new Student
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Surname = s.Surname,
+                Patronymic = s.Patronymic,
+                SexNumber = s.SexNumber,
+                DateOfBirth = s.DateOfBirth,
+                StudyGroup = new StudyGroup { Name = s.StudyGroup.Name },
+            }).ToList();
 
-            mySeed.CreateCourses();
-            return View();
+            var studentViewModel = new StudentIndexViewModel { Students = studentList };
+
+            return View(studentViewModel);
         }
 
-        // GET: StudentController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
 
-        // GET: StudentController/Create
         public ActionResult Create()
         {
-            return View();
+            var studyGroupOptions = _dbContext.StudyGroups.ToDictionary(s => s.Id, s => s.Name);
+
+            var studentViewModel = new StudentCreateViewModel {  StudyGroupOptions = studyGroupOptions };
+
+            return View(studentViewModel);
         }
 
-        public ActionResult CreateCourses()
-        {
-            return View("Create");
-        }
-
-        // POST: StudentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Student student)
         {
-            try
+            bool isStudyGroupExist = _dbContext.StudyGroups.Any(s => s.Id == student.StudyGroupId);
+
+            if (!isStudyGroupExist )
             {
+                TempData["error"] = "error test";
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            _dbContext.Students.Add(student);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: StudentController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var student = _dbContext.Students.Find(id);
+
+            if (student == null) return RedirectToAction(nameof(Index));
+
+            var studyGroupOptions = _dbContext.StudyGroups.ToDictionary(s => s.Id, s => s.Name);
+
+            var studyGroupViewModel = new StudentCreateViewModel { Student = student, StudyGroupOptions = studyGroupOptions };
+
+            return View(studyGroupViewModel);
         }
 
-        // POST: StudentController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Student student)
         {
-            try
+            bool isStudyGroupExist = _dbContext.StudyGroups.Any(s => s.Id == student.StudyGroupId);
+
+            if (!isStudyGroupExist)
             {
+                TempData["error"] = "error test";
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            _dbContext.Students.Update(student);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: StudentController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            return View();
-        }
+            var student = _dbContext.Students.Find(id);
 
-        // POST: StudentController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (student == null) return RedirectToAction(nameof(Index));
+
+            _dbContext.Students.Remove(student);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

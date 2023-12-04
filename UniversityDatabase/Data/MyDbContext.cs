@@ -11,6 +11,7 @@ namespace UniversityDatabase.Data
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<StudyGroup> StudyGroups { get; set; }
+        public DbSet<Student> Students { get; set; }
 
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }

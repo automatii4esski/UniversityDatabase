@@ -22,19 +22,19 @@
         </div>
     @foreach (var department in Model.Departments)
     {
-            <div class="info-row">
-                    <div style="width:@cellCssWidth" class="info-cell">@department.Name</div>
-                    <div style="width:@cellCssWidth" class="info-cell">@department.Phone</div>
-                    <div style="width:@cellCssWidth" class="info-cell">@department.Faculty.Name</div>
-                    <div style="width:@cellCssWidth" class="info-cell">@department.Faculty.Dean.Name</div>
-                        <div class="info-cell info-cell-actions">
-                                <a asp-action="Edit" asp-route-id="@department.Id" class="btn btn-warning">Edit</a>
-                                <form asp-route-id="@department.Id" asp-action="Delete">
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
+                    <div class="info-row">
+                            <div style="width:@cellCssWidth" class="info-cell">@department.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@department.Phone</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@department.Faculty.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@department.Faculty.Dean.Name</div>
+                                <div class="info-cell info-cell-actions">
+                                        <a asp-action="Edit" asp-route-id="@department.Id" class="btn btn-warning">Edit</a>
+                                        <form asp-route-id="@department.Id" asp-action="Delete">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
 
-                        </div>
-            </div>
+                                </div>
+                    </div>
     }
 
 </div>
