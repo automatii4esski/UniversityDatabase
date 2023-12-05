@@ -40,6 +40,21 @@ namespace UniversityDatabase.Seed
             }
         }
 
+        public void CreateTeacherPositions()
+        {
+            var teacherPositions = new string[] { "Ассистенты", "Преподаватели", "Старшие", "Преподаватели", "Доценты", "Профессора"  };
+
+            for (byte i = 0; i < teacherPositions.Length; i++)
+            {
+                var teacherPosition = _dbContext.TeacherPositions.FirstOrDefault(t => t.Name == teacherPositions[i]);
+
+                if (teacherPosition != null) continue;
+
+                _dbContext.TeacherPositions.Add(new TeacherPosition { Name = teacherPositions[i] });
+                _dbContext.SaveChanges();
+            }
+        }
+
         public void CreateSemesters()
         {
             for (byte i = 1; i <= 2; i++)

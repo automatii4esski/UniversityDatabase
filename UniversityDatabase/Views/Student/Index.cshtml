@@ -32,7 +32,7 @@
                             <div style="width:@cellCssWidth" class="info-cell">@student.StudyGroup.Name</div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.Sex.Name</div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.Age</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@student.DateOfBirth</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@student.DateOfBirthUI</div>
                                 <div class="info-cell info-cell-actions">
                                         <a asp-action="Edit" asp-route-id="@student.Id" class="btn btn-warning">Edit</a>
                                         <form asp-route-id="@student.Id" asp-action="Delete">

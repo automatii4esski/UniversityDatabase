@@ -1,0 +1,50 @@
+﻿@model UniversityDatabase.ViewModels.Teacher.TeacherIndexViewModel;
+
+@{
+    string cellCssWidth = $"{90 / 9}%";
+} 
+
+
+<div>
+    <h2 class="info-title">Преаодаватели</h2>
+    <hr />
+    <div class="box">
+
+    <a class="btn btn-primary" asp-action="Create">Создать</a>
+    </div>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Name</div>
+            <div style="width:@cellCssWidth" class="info-cell">Surname</div>
+            <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
+            <div style="width:@cellCssWidth" class="info-cell">Department</div>
+            <div style="width:@cellCssWidth" class="info-cell">Salary</div>
+            <div style="width:@cellCssWidth" class="info-cell">Position</div>
+            <div style="width:@cellCssWidth" class="info-cell">Sex</div>
+            <div style="width:@cellCssWidth" class="info-cell">Age</div>
+            <div style="width:@cellCssWidth" class="info-cell">Date Of Birth</div>
+            <div class="info-cell info-cell-actions">Actions</div>
+        </div>
+    @foreach (var teacher in Model.Teachers)
+    {
+                    <div class="info-row">
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Department.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Salary</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.TeacherPosition.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Sex.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Age</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@teacher.DateOfBirthUI</div>
+                                <div class="info-cell info-cell-actions">
+                                        <a asp-action="Edit" asp-route-id="@teacher.Id" class="btn btn-warning">Edit</a>
+                                        <form asp-route-id="@teacher.Id" asp-action="Delete">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+
+                                </div>
+                    </div>
+    }
+
+</div>

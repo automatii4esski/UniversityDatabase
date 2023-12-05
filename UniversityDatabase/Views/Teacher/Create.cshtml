@@ -1,0 +1,89 @@
+﻿@model UniversityDatabase.ViewModels.Teacher.TeacherCreateViewModel;
+
+<h2 class="info-title">Создать Преподавателя</h2>
+    <hr />
+        <form class="form form-create" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Teacher.Name" class="control-label">Имя</label>
+                <input  asp-for="Teacher.Name" class="form-control" />
+                <span asp-validation-for="Teacher.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Teacher.Surname" class="control-label">Фамилия</label>
+                <input asp-for="Teacher.Surname" class="form-control" />
+                <span asp-validation-for="Teacher.Surname" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Teacher.Patronymic" class="control-label">Отчество</label>
+                <input asp-for="Teacher.Patronymic" class="form-control" />
+                <span asp-validation-for="Teacher.Patronymic" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Teacher.Salary" class="control-label">Зарплата</label>
+                <input type="number" min="0" asp-for="Teacher.Salary" class="form-control" />
+                <span asp-validation-for="Teacher.Salary" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                         <div class="control-label">Пол
+                        <br />
+                        @foreach (var sex in Model.SexOptions)
+                        {
+                                      <label asp-for="Teacher.SexId" class="control-label">
+                                      @sex.Value
+                                               <input asp-for="Teacher.SexId" value="@sex.Key" type="radio"/>
+                                  </label>
+                        }
+                        </div>
+                <span asp-validation-for="Teacher.SexId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Teacher.DateOfBirth" class="control-label">Дата рождения</label>
+                <input value="@(new DateTime(DateTime.Now.Year - 18, 1, 1).ToString("yyyy-MM-dd"))" type="date" asp-for="Teacher.DateOfBirth" class="form-control" />
+                <span asp-validation-for="Teacher.DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Teacher.TeacherPositionId" class="control-label">Позиция</label>
+                <select class="form-select" asp-for="Teacher.TeacherPositionId">
+                    <option hidden selected value="">Select</option>
+
+            @foreach (var teacherPosition in Model.TeacherPositionOptions)
+            {
+
+                        <option value="@teacherPosition.Key" >@teacherPosition.Value</option>
+            }
+                </select>
+                <span asp-validation-for="Teacher.TeacherPositionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Teacher.DepartmentId" class="control-label">Кафедра</label>
+                <select class="form-select" asp-for="Teacher.DepartmentId">
+                    <option hidden selected value="">Select</option>
+
+            @foreach (var department in Model.DepartmentOptions)
+            {
+
+                <option value="@department.Key" >@department.Value</option>
+            }
+                </select>
+                <span asp-validation-for="Teacher.DepartmentId" class="text-danger"></span>
+            </div>
+
+            <div style="margin-top:10px;" class="form-group box">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

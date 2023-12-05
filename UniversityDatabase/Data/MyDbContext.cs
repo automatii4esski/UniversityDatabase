@@ -13,6 +13,8 @@ namespace UniversityDatabase.Data
         public DbSet<StudyGroup> StudyGroups { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Sex> Sexes { get; set; }
+        public DbSet<TeacherPosition> TeacherPositions { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 

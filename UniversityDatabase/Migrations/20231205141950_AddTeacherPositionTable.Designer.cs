@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityDatabase.Data;
 
@@ -10,9 +11,11 @@ using UniversityDatabase.Data;
 namespace UniversityDatabase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231205141950_AddTeacherPositionTable")]
+    partial class AddTeacherPositionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +157,7 @@ namespace UniversityDatabase.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("DATE")
+                        .HasColumnType("datetime")
                         .HasColumnName("date_of_birth");
 
                     b.Property<string>("Name")
@@ -220,59 +223,6 @@ namespace UniversityDatabase.Migrations
                     b.HasIndex("FacultyId");
 
                     b.ToTable("study_group");
-                });
-
-            modelBuilder.Entity("UniversityDatabase.Models.Teacher", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("DATE")
-                        .HasColumnName("date_of_birth");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int")
-                        .HasColumnName("department_id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("name");
-
-                    b.Property<string>("Patronymic")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("patronymic");
-
-                    b.Property<int>("Salary")
-                        .HasColumnType("int")
-                        .HasColumnName("salary");
-
-                    b.Property<byte>("SexId")
-                        .HasColumnType("tinyint unsigned")
-                        .HasColumnName("sex_id");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("surname");
-
-                    b.Property<byte>("TeacherPositionId")
-                        .HasColumnType("tinyint unsigned")
-                        .HasColumnName("teacher_position_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("SexId");
-
-                    b.HasIndex("TeacherPositionId");
-
-                    b.ToTable("teacher");
                 });
 
             modelBuilder.Entity("UniversityDatabase.Models.TeacherPosition", b =>
@@ -350,33 +300,6 @@ namespace UniversityDatabase.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Faculty");
-                });
-
-            modelBuilder.Entity("UniversityDatabase.Models.Teacher", b =>
-                {
-                    b.HasOne("UniversityDatabase.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniversityDatabase.Models.Sex", "Sex")
-                        .WithMany()
-                        .HasForeignKey("SexId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniversityDatabase.Models.TeacherPosition", "TeacherPosition")
-                        .WithMany()
-                        .HasForeignKey("TeacherPositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Sex");
-
-                    b.Navigation("TeacherPosition");
                 });
 #pragma warning restore 612, 618
         }

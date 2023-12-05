@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using UniversityDatabase.Config;
 
 namespace UniversityDatabase.Models
 {
@@ -25,20 +26,12 @@ namespace UniversityDatabase.Models
         [Required]
         public string Patronymic { get; set; } = "";
 
-        [NotMapped]
-        public int Age
-        {
-            get
-            {
-                var diff = DateTime.Now - DateOfBirth;
-                var yearsDiff = (new DateTime(1, 1, 1) + diff).Year - 1;
-                return yearsDiff;
-            }
-        }
-
-        [Column("date_of_birth")]
+        [Column("date_of_birth", TypeName = "DATE")]
         [Required]
         public DateTime DateOfBirth { get; set; }
+
+        [NotMapped]
+        public DateOnly DateOfBirthUI { get => DateOnly.FromDateTime(DateOfBirth); }
 
         [Column("sex_id")]
         public byte SexId { get; set; }
@@ -46,6 +39,15 @@ namespace UniversityDatabase.Models
 
         [Column("study_group_id")]
         public int StudyGroupId { get; set; }
-        public virtual StudyGroup StudyGroup { get; set; }
+        public virtual StudyGroup StudyGroup { get; set; } 
+
+        [NotMapped]
+        public int Age
+        {
+            get
+            {
+                return MyDate.GetAge(DateOfBirth);
+            }
+        }
     }
 }
