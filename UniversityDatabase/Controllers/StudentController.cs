@@ -26,7 +26,7 @@ namespace UniversityDatabase.Controllers
                 Name = s.Name,
                 Surname = s.Surname,
                 Patronymic = s.Patronymic,
-                SexNumber = s.SexNumber,
+                Sex = new Sex { Name = s.Sex.Name },
                 DateOfBirth = s.DateOfBirth,
                 StudyGroup = new StudyGroup { Name = s.StudyGroup.Name },
             }).ToList();
@@ -40,8 +40,9 @@ namespace UniversityDatabase.Controllers
         public ActionResult Create()
         {
             var studyGroupOptions = _dbContext.StudyGroups.ToDictionary(s => s.Id, s => s.Name);
+            var sexOptions  = _dbContext.Sexes.ToDictionary(s => s.Id, s => s.Name);
 
-            var studentViewModel = new StudentCreateViewModel {  StudyGroupOptions = studyGroupOptions };
+            var studentViewModel = new StudentCreateViewModel { SexOptions = sexOptions,  StudyGroupOptions = studyGroupOptions };
 
             return View(studentViewModel);
         }
@@ -71,8 +72,9 @@ namespace UniversityDatabase.Controllers
             if (student == null) return RedirectToAction(nameof(Index));
 
             var studyGroupOptions = _dbContext.StudyGroups.ToDictionary(s => s.Id, s => s.Name);
+            var sexOptions = _dbContext.Sexes.ToDictionary(s => s.Id, s => s.Name);
 
-            var studyGroupViewModel = new StudentCreateViewModel { Student = student, StudyGroupOptions = studyGroupOptions };
+            var studyGroupViewModel = new StudentCreateViewModel { Student = student, SexOptions = sexOptions, StudyGroupOptions = studyGroupOptions };
 
             return View(studyGroupViewModel);
         }

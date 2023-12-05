@@ -11,7 +11,7 @@ using UniversityDatabase.Data;
 namespace UniversityDatabase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231204180134_AddStudentTable")]
+    [Migration("20231205140316_AddStudentTable")]
     partial class AddStudentTable
     {
         /// <inheritdoc />
@@ -132,6 +132,23 @@ namespace UniversityDatabase.Migrations
                     b.ToTable("semester");
                 });
 
+            modelBuilder.Entity("UniversityDatabase.Models.Sex", b =>
+                {
+                    b.Property<byte>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint unsigned")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("sex");
+                });
+
             modelBuilder.Entity("UniversityDatabase.Models.Student", b =>
                 {
                     b.Property<int>("Id")
@@ -153,9 +170,9 @@ namespace UniversityDatabase.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("patronymic");
 
-                    b.Property<byte>("SexNumber")
+                    b.Property<byte>("SexId")
                         .HasColumnType("tinyint unsigned")
-                        .HasColumnName("sex");
+                        .HasColumnName("sex_id");
 
                     b.Property<int>("StudyGroupId")
                         .HasColumnType("int")
@@ -167,6 +184,8 @@ namespace UniversityDatabase.Migrations
                         .HasColumnName("surname");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SexId");
 
                     b.HasIndex("StudyGroupId");
 
@@ -230,11 +249,19 @@ namespace UniversityDatabase.Migrations
 
             modelBuilder.Entity("UniversityDatabase.Models.Student", b =>
                 {
+                    b.HasOne("UniversityDatabase.Models.Sex", "Sex")
+                        .WithMany()
+                        .HasForeignKey("SexId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("UniversityDatabase.Models.StudyGroup", "StudyGroup")
                         .WithMany()
                         .HasForeignKey("StudyGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Sex");
 
                     b.Navigation("StudyGroup");
                 });

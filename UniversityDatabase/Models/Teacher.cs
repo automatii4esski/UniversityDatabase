@@ -5,8 +5,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace UniversityDatabase.Models
 {
-    [Table("student")]
-    public class Student
+    [Table("teacher")]
+    public class Teacher
     {
         [Column("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -25,6 +25,11 @@ namespace UniversityDatabase.Models
         [Required]
         public string Patronymic { get; set; } = "";
 
+        [Column("sex")]
+        [Required]
+        public byte SexNumber { get; set; }
+
+
         [NotMapped]
         public int Age
         {
@@ -39,10 +44,6 @@ namespace UniversityDatabase.Models
         [Column("date_of_birth")]
         [Required]
         public DateTime DateOfBirth { get; set; }
-
-        [Column("sex_id")]
-        public byte SexId { get; set; }
-        public virtual Sex Sex { get; set; }
 
         [Column("study_group_id")]
         public int StudyGroupId { get; set; }

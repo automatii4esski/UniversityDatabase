@@ -1,6 +1,5 @@
 ﻿namespace UniversityDatabase.ViewModels.Student
 {
-    using UniversityDatabase.Config;
     using UniversityDatabase.Models;
     public class StudentIndexViewModel
     {

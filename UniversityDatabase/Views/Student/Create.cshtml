@@ -26,13 +26,13 @@
                         <br />
                         @foreach (var sex in Model.SexOptions)
                         {
-                                  <label asp-for="Student.SexNumber" class="control-label">Пол
+                                  <label asp-for="Student.SexId" class="control-label">
                                       @sex.Value
-                                       <input asp-for="Student.SexNumber" value="@sex.Key" type="radio"/>
+                                           <input asp-for="Student.SexId" value="@sex.Key" type="radio"/>
                                   </label>
                         }
                         </div>
-                <span asp-validation-for="Student.SexNumber" class="text-danger"></span>
+                <span asp-validation-for="Student.SexId" class="text-danger"></span>
             </div>
 
             <div class="form-group">

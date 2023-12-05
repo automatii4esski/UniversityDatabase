@@ -12,7 +12,7 @@ namespace UniversityDatabase.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<StudyGroup> StudyGroups { get; set; }
         public DbSet<Student> Students { get; set; }
-
+        public DbSet<Sex> Sexes { get; set; }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 

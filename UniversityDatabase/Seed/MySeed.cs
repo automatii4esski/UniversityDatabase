@@ -25,6 +25,21 @@ namespace UniversityDatabase.Seed
             }
         }
 
+        public void CreateSexes()
+        {
+            var sexes = new string[]{ "Женский", "Мужской" };
+
+            for (byte i = 0; i < sexes.Length; i++)
+            {
+                var sex = _dbContext.Sexes.FirstOrDefault(s => s.Name == sexes[i]);
+
+                if (sex != null) continue;
+
+                _dbContext.Sexes.Add(new Sex { Name = sexes[i] });
+                _dbContext.SaveChanges();
+            }
+        }
+
         public void CreateSemesters()
         {
             for (byte i = 1; i <= 2; i++)
