@@ -15,6 +15,9 @@ namespace UniversityDatabase.Data
         public DbSet<Sex> Sexes { get; set; }
         public DbSet<TeacherPosition> TeacherPositions { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<TypeOfOccupation> TypeOfOccupations { get; set; }
+        public DbSet<FormOfControl> FormOfControls { get; set; }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 

@@ -42,7 +42,7 @@ namespace UniversityDatabase.Seed
 
         public void CreateTeacherPositions()
         {
-            var teacherPositions = new string[] { "Ассистенты", "Преподаватели", "Старшие", "Преподаватели", "Доценты", "Профессора"  };
+            var teacherPositions = new string[] { "Ассистент", "Преподаватель", "Старший преподаватель", "Преподаватель", "Доцент", "Профессор"  };
 
             for (byte i = 0; i < teacherPositions.Length; i++)
             {
