@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityDatabase.Data;
 
@@ -10,9 +11,11 @@ using UniversityDatabase.Data;
 namespace UniversityDatabase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231207130809_AddStudyPlanTable")]
+    partial class AddStudyPlanTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,9 +244,9 @@ namespace UniversityDatabase.Migrations
 
             modelBuilder.Entity("UniversityDatabase.Models.StudyPlan", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<byte>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("tinyint unsigned")
                         .HasColumnName("id");
 
                     b.Property<byte>("CourseId")

@@ -1,0 +1,46 @@
+﻿@model UniversityDatabase.ViewModels.StudyPlan.StudyPlanIndexViewModel;
+
+@{
+    string cellCssWidth = $"{90 / 7}%";
+} 
+
+
+<div>
+    <h2 class="info-title">Учебный план</h2>
+    <hr />
+    <div class="box">
+
+    <a class="btn btn-primary" asp-action="Create">Создать</a>
+    </div>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Кол-во часов</div>
+            <div style="width:@cellCssWidth" class="info-cell">Курс</div>
+            <div style="width:@cellCssWidth" class="info-cell">Семестр</div>
+            <div style="width:@cellCssWidth" class="info-cell">Дисциплина</div>
+            <div style="width:@cellCssWidth" class="info-cell">Учебная Группа</div>
+            <div style="width:@cellCssWidth" class="info-cell">Форма контроля</div>
+            <div style="width:@cellCssWidth" class="info-cell">Фид занятий</div>
+            <div class="info-cell info-cell-actions">Actions</div>
+        </div>
+    @foreach (var studyPlan in Model.StudyPlans)
+    {
+                <div class="info-row">
+                        <div style="width:@cellCssWidth" class="info-cell">@studyPlan.TotalHours</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Course.Number</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Semester.Number</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Subject.Name</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyPlan.StudyGroup.Name</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyPlan.FormOfControl.Name</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studyPlan.TypeOfOccupation.Name</div>
+                            <div class="info-cell info-cell-actions">
+                                    <a asp-action="Edit" asp-route-id="@studyPlan.Id" class="btn btn-warning">Edit</a>
+                                    <form asp-route-id="@studyPlan.Id" asp-action="Delete">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+
+                            </div>
+                </div>
+    }
+
+</div>

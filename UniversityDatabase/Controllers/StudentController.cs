@@ -31,6 +31,12 @@ namespace UniversityDatabase.Controllers
                 StudyGroup = new StudyGroup { Name = s.StudyGroup.Name },
             }).ToList();
 
+            var seed = new MySeed(_dbContext);
+
+            seed.CreateFormOfControls();
+            seed.CreateSubjects();
+            seed.CreateTypeOfOccupations();
+
             var studentViewModel = new StudentIndexViewModel { Students = studentList };
 
             return View(studentViewModel);

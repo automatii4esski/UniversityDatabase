@@ -18,6 +18,7 @@ namespace UniversityDatabase.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<TypeOfOccupation> TypeOfOccupations { get; set; }
         public DbSet<FormOfControl> FormOfControls { get; set; }
+        public DbSet<StudyPlan> StudyPlans { get; set; }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 

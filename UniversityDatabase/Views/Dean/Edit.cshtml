@@ -5,7 +5,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form class="form form-create" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input value="@Model.Dean.Id" type="hidden" asp-for="Dean.Id" />
             <div class="form-group">
