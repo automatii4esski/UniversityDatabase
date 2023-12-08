@@ -1,4 +1,6 @@
-﻿using UniversityDatabase.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
+using UniversityDatabase.Data;
 using UniversityDatabase.Models;
 
 namespace UniversityDatabase.Seed
@@ -12,16 +14,52 @@ namespace UniversityDatabase.Seed
             _dbContext = dbContext;
         }
 
+        public void CreateGradeValues()
+        {
+            var gradeValuesNumber = new string[] { "1", "2", "3", "4", "5" };
+            var gradeValuesTest = new string[] { "Зачет", "Незачет" };
+
+            int numberFormOfControlId = _dbContext.FormOfControls
+                .Where(f => f.Name == "Экзамен")
+                .Select(e => e.Id)
+                .FirstOrDefault();
+
+            int testFormOfControlId = _dbContext.FormOfControls
+                .Where(f => f.Name == "Зачет")
+                .Select(e => e.Id)
+                .FirstOrDefault();
+
+            for (int i = 0; i < gradeValuesNumber.Length; i++)
+            {
+                var gradeValue = _dbContext.GradeValues.FirstOrDefault(g => g.Value == gradeValuesNumber[i]);
+
+                if (gradeValue != null) continue;
+
+                _dbContext.GradeValues.Add(new GradeValue { FormOfControlId = numberFormOfControlId, Value = gradeValuesNumber[i] });
+            }
+
+            for (int i = 0; i < gradeValuesTest.Length; i++)
+            {
+                var gradeValue = _dbContext.GradeValues.FirstOrDefault(g => g.Value == gradeValuesTest[i]);
+
+                if (gradeValue != null) continue;
+
+                _dbContext.GradeValues.Add(new GradeValue { FormOfControlId = testFormOfControlId, Value = gradeValuesTest[i] });
+            }
+            _dbContext.SaveChanges();
+        }
+
 
         public void CreateCourses()
         {
-            for (byte i = 1; i <= 4; i++)
+            var courses = new byte[] { 1,2,3,4 };
+            for (int i = 0; i < courses.Length; i++)
             {
-                var course = _dbContext.Courses.FirstOrDefault(c => c.Number == i);
+                var course = _dbContext.Courses.FirstOrDefault(c => c.Number == courses[i]);
 
                 if (course != null) continue;
 
-                _dbContext.Courses.Add(new Course { Number = i });
+                _dbContext.Courses.Add(new Course { Number = courses[i] });
             }
             _dbContext.SaveChanges();
         }
@@ -103,13 +141,14 @@ namespace UniversityDatabase.Seed
 
         public void CreateSemesters()
         {
-            for (byte i = 1; i <= 2; i++)
+            var semesters = new byte[] { 1, 2 };
+            for (byte i = 0; i < semesters.Length; i++)
             {
-                var semester = _dbContext.Semesters.FirstOrDefault(c => c.Number == i);
+                var semester = _dbContext.Semesters.FirstOrDefault(c => c.Number == semesters[i]);
 
                 if (semester != null) continue;
 
-                _dbContext.Semesters.Add(new Semester { Number = i });
+                _dbContext.Semesters.Add(new Semester { Number = semesters[i] });
             }
                 _dbContext.SaveChanges();
         }

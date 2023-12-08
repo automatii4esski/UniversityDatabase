@@ -34,6 +34,10 @@ namespace UniversityDatabase.Controllers
                 TypeOfOccupation = new TypeOfOccupation { Name = s.TypeOfOccupation.Name },
             }).ToList();
 
+            var seed = new MySeed(_dbContext);
+
+            seed.CreateGradeValues();
+
             var studyPlanViewModel = new StudyPlanIndexViewModel { StudyPlans = studyPlanList };
 
             return View(studyPlanViewModel);

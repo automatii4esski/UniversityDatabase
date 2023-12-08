@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityDatabase.Data;
 
@@ -10,9 +11,11 @@ using UniversityDatabase.Data;
 namespace UniversityDatabase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231208141853_AddGradeValueTable")]
+    partial class AddGradeValueTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,36 +230,6 @@ namespace UniversityDatabase.Migrations
                     b.HasIndex("StudyGroupId");
 
                     b.ToTable("student");
-                });
-
-            modelBuilder.Entity("UniversityDatabase.Models.StudentGrade", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<byte>("GradeValueId")
-                        .HasColumnType("tinyint unsigned")
-                        .HasColumnName("grade_value_id");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int")
-                        .HasColumnName("student_id");
-
-                    b.Property<int>("StudyPlanId")
-                        .HasColumnType("int")
-                        .HasColumnName("study_plan_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GradeValueId");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("StudyPlanId");
-
-                    b.ToTable("student_grade");
                 });
 
             modelBuilder.Entity("UniversityDatabase.Models.StudyGroup", b =>
@@ -498,33 +471,6 @@ namespace UniversityDatabase.Migrations
                     b.Navigation("Sex");
 
                     b.Navigation("StudyGroup");
-                });
-
-            modelBuilder.Entity("UniversityDatabase.Models.StudentGrade", b =>
-                {
-                    b.HasOne("UniversityDatabase.Models.GradeValue", "GradeValue")
-                        .WithMany()
-                        .HasForeignKey("GradeValueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniversityDatabase.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniversityDatabase.Models.StudyPlan", "StudyPlan")
-                        .WithMany()
-                        .HasForeignKey("StudyPlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GradeValue");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("StudyPlan");
                 });
 
             modelBuilder.Entity("UniversityDatabase.Models.StudyGroup", b =>
