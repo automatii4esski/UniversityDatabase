@@ -1,0 +1,43 @@
+﻿@model UniversityDatabase.ViewModels.StudentGrade.StudentGradeCreateViewMode
+
+<h2 class="info-title">Установить оценку</h2>
+    <hr />
+        <form class="form form-create" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input value="@Model.StudentGrade.Id" type="hidden" asp-for="StudentGrade.Id" />
+            <input value="@Model.StudentGrade.StudentId" type="hidden" asp-for="StudentGrade.StudentId" />
+            <input value="@Model.StudentGrade.StudyPlanId" type="hidden" asp-for="StudentGrade.StudyPlanId" />
+            <div class="form-group">
+                <label asp-for="StudentGrade.GradeValueId" class="control-label">Оценка</label>
+                <select class="form-select" asp-for="StudentGrade.GradeValueId">
+                    <option hidden selected value="">Select</option>
+
+            @foreach (var grade in Model.GradeValueOptions)
+            {
+                if (Model.StudentGrade.GradeValueId == grade.Key)
+                {
+                                               <option selected value="@grade.Key" >@grade.Value</option>
+                }
+                else
+                {
+                                                <option value="@grade.Key" >@grade.Value</option>
+                }
+            }
+                </select>
+                <span asp-validation-for="StudentGrade.GradeValueId" class="text-danger"></span>
+            </div>
+
+            <div style="margin-top:10px;" class="form-group box">
+                <input type="submit" value="Edit" class="btn btn-success" />
+            </div>
+        </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

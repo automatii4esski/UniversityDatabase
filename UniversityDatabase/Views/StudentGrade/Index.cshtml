@@ -1,0 +1,43 @@
+﻿@model UniversityDatabase.ViewModels.StudentGrade.StudentGradeIndexViewMode;
+
+@{
+    string cellCssWidth = $"{90 / 8}%";
+} 
+
+
+<div>
+    <h2 class="info-title">Оценки студентов</h2>
+    <hr />
+    <div class="box">
+
+    </div>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Имя</div>
+            <div style="width:@cellCssWidth" class="info-cell">Фамилия</div>
+            <div style="width:@cellCssWidth" class="info-cell">Отчество</div>
+            <div style="width:@cellCssWidth" class="info-cell">Учебная Группа</div>
+            <div style="width:@cellCssWidth" class="info-cell">Курс</div>
+            <div style="width:@cellCssWidth" class="info-cell">Семестр</div>
+            <div style="width:@cellCssWidth" class="info-cell">Предмет</div>
+            <div style="width:@cellCssWidth" class="info-cell">Оценка</div>
+            <div class="info-cell info-cell-actions">Actions</div>
+        </div>
+    @foreach (var studentGrade in Model.StudentGrades)
+    {
+                <div class="info-row">
+                        <div style="width:@cellCssWidth" class="info-cell">@studentGrade.Student.Name</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studentGrade.Student.Surname</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@studentGrade.Student.Patronymic</div>
+                        <div style="width:@cellCssWidth" class="info-cell">@studentGrade.StudyPlan.StudyGroup.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@studentGrade.StudyPlan.Course.Number</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@studentGrade.StudyPlan.Semester.Number</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@studentGrade.StudyPlan.Subject.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@studentGrade.Grade</div>
+                            <div class="info-cell info-cell-actions">
+                                    <a asp-action="Edit" asp-route-id="@studentGrade.Id" class="btn btn-warning">Установить оценку</a>
+                            </div>
+                </div>
+    }
+
+</div>

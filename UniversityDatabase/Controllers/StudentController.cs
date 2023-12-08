@@ -65,7 +65,16 @@ namespace UniversityDatabase.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            var studyPlansIdOfNewStudyGroup = _dbContext.StudyPlans.Where(s => s.StudyGroupId == student.StudyGroupId).Select(s => s.Id);
+
             _dbContext.Students.Add(student);
+            _dbContext.SaveChanges();
+
+            foreach (var studyPlan in studyPlansIdOfNewStudyGroup)
+            {
+                _dbContext.StudentGrades.Add(new StudentGrade { StudentId = student.Id, StudyPlanId = studyPlan });
+            }
+            
             _dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
@@ -87,7 +96,7 @@ namespace UniversityDatabase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Student student)
+        public ActionResult Edit(Student student, int initialStudyGroupId)
         {
             bool isStudyGroupExist = _dbContext.StudyGroups.Any(s => s.Id == student.StudyGroupId);
 
@@ -95,6 +104,19 @@ namespace UniversityDatabase.Controllers
             {
                 TempData["error"] = "error test";
                 return RedirectToAction(nameof(Index));
+            }
+
+            if (student.StudyGroupId != initialStudyGroupId)
+            {
+                var studentGrades = _dbContext.StudentGrades.Where(s => s.StudentId == student.Id);
+                _dbContext.StudentGrades.RemoveRange(studentGrades);
+
+                var studyPlansIdOfNewStudyGroup = _dbContext.StudyPlans.Where(s => s.StudyGroupId == student.StudyGroupId).Select(s => s.Id);
+
+                foreach(var studyPlan in studyPlansIdOfNewStudyGroup)
+                {
+                    _dbContext.StudentGrades.Add(new StudentGrade { StudentId = student.Id, StudyPlanId = studyPlan});
+                }
             }
 
             _dbContext.Students.Update(student);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UniversityDatabase.Data;
 using UniversityDatabase.Models;
 using UniversityDatabase.Seed;
@@ -34,9 +35,6 @@ namespace UniversityDatabase.Controllers
                 TypeOfOccupation = new TypeOfOccupation { Name = s.TypeOfOccupation.Name },
             }).ToList();
 
-            var seed = new MySeed(_dbContext);
-
-            seed.CreateGradeValues();
 
             var studyPlanViewModel = new StudyPlanIndexViewModel { StudyPlans = studyPlanList };
 
@@ -62,6 +60,7 @@ namespace UniversityDatabase.Controllers
                 TypeOfOccupationOptions = typeOfOccupationOptions
             };
 
+
             return View(studyPlanViewModel);
         }
 
@@ -84,8 +83,16 @@ namespace UniversityDatabase.Controllers
             }
 
             _dbContext.StudyPlans.Add(studyPlan);
+
             _dbContext.SaveChanges();
 
+            var studentsOfStudyGroup = _dbContext.Students.Where(s => s.StudyGroupId == studyPlan.StudyGroupId).ToList();
+            foreach (var student in studentsOfStudyGroup)
+            {
+                _dbContext.StudentGrades.Add(new StudentGrade { StudentId = student.Id, StudyPlanId = studyPlan.Id });
+            }
+
+            _dbContext.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 

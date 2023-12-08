@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace UniversityDatabase.Models
 {
@@ -12,8 +13,8 @@ namespace UniversityDatabase.Models
         public int Id { get; set; }
 
         [Column("grade_value_id")]
-        [Required]
-        public byte GradeValueId { get; set; }
+        [AllowNull]
+        public byte? GradeValueId { get; set; }
         public virtual GradeValue GradeValue { get; set; }
 
         [Column("student_id")]
@@ -25,5 +26,11 @@ namespace UniversityDatabase.Models
         [Required]
         public int StudyPlanId { get; set; }
         public virtual StudyPlan StudyPlan { get; set; }
+
+        [NotMapped]
+        public string Grade { get
+            {
+                return GradeValueId == null || GradeValue == null ? "Нет оценки" : GradeValue.Value;
+            } }
     }
 }
