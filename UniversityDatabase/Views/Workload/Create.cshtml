@@ -52,9 +52,41 @@
             </div>
         </form>
 
+ч
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+@if (Model.OtherWorkloads.Count() > 0)
+{
+                         <hr />
+                        <h2 class="info-title">Другие назначенные нагрузки для этого учебного плана</h2>
+                <hr />
+                    <div class="info-row info-row-title">
+                            <div style="width:@cellCssWidth" class="info-cell">Имя</div>
+                            <div style="width:@cellCssWidth" class="info-cell">Фамилия</div>
+                            <div style="width:@cellCssWidth" class="info-cell">Отчество</div>
+                            <div style="width:@cellCssWidth" class="info-cell">Кол-во часов</div>
+                            <div style="width:@cellCssWidth" class="info-cell">Действия</div>
+                        </div>
+    @foreach (var workload in Model.OtherWorkloads)
+    {
+                                 <div class="info-row">
+                                                            <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Name</div>
+                                                                        <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Surname</div>
+                                                                        <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Patronymic</div>
+                                                                    <div style="width:@cellCssWidth" class="info-cell">@workload.TotalHours</div>
+                                                                            <div class="info-cell info-cell-actions">
+                                                <a asp-action="Edit" asp-route-id="@workload.Id" class="btn btn-warning">Edit</a>
+                                                        <form asp-route-isRedirectBack="true" asp-route-id="@workload.Id" asp-action="Delete">
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+
+                                        </div>
+                                                    </div>
+    }
+
+}
 
 @section Scripts {
     @{

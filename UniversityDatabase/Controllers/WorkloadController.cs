@@ -77,7 +77,8 @@ namespace UniversityDatabase.Controllers
             }
 
             var workload = new Workload { StudyPlanId = studyPlanId, TeacherId = teacherId, StudyPlan = studyPlan, Teacher = teacher };
-            var workloadViewModel = new WorkloadCreateViewModel { Workload = workload };
+            var otherWorkloadList = GetOtherWorkloadsOfStudyPlan(studyPlan.Id);
+            var workloadViewModel = new WorkloadCreateViewModel { OtherWorkloads = otherWorkloadList, Workload = workload };
 
             return View(workloadViewModel);
         }
@@ -109,6 +110,24 @@ namespace UniversityDatabase.Controllers
             _dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private List<Workload> GetOtherWorkloadsOfStudyPlan(int studyPlanId)
+        {
+            var workloadList = _dbContext.Workloads.Where(w => w.StudyPlanId == studyPlanId)
+                .Select(w => new Workload
+                {
+                    Id = w.Id,
+                    TotalHours = w.TotalHours,
+                    Teacher = new Teacher
+                    {
+                        Name = w.Teacher.Name,
+                        Surname = w.Teacher.Surname,
+                        Patronymic = w.Teacher.Patronymic
+                    }
+                }).ToList();
+
+            return workloadList;
         }
 
         public ActionResult Edit(int id)
@@ -146,8 +165,9 @@ namespace UniversityDatabase.Controllers
 
             workload.Teacher = teacher;
             workload.StudyPlan = studyPlan;
+            var otherWorkloadList = GetOtherWorkloadsOfStudyPlan(studyPlan.Id);
 
-            var workloadViewModel = new WorkloadCreateViewModel { Workload = workload };
+            var workloadViewModel = new WorkloadCreateViewModel {OtherWorkloads = otherWorkloadList, Workload = workload };
 
             return View(workloadViewModel);
         }
@@ -183,7 +203,7 @@ namespace UniversityDatabase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, string? isRedirectBack)
         {
             var workload = _dbContext.Workloads.Find(id);
 
@@ -199,6 +219,12 @@ namespace UniversityDatabase.Controllers
             _dbContext.StudyPlans.Update(studyPlan);
             _dbContext.SaveChanges();
 
+            var previusUrl = Request.Headers["Referer"].ToString();
+
+            if (isRedirectBack != null && previusUrl != null)
+            {
+                return Redirect(previusUrl);
+            }
             return RedirectToAction(nameof(Index));
         }
     }
