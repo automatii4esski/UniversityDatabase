@@ -1,0 +1,65 @@
+﻿@model UniversityDatabase.ViewModels.Workload.WorkloadCreateViewModel;
+
+@{
+    string cellCssWidth = $"{100 / 8}%";
+} 
+<h2 class="info-title">Установить нагрузку для преподавателя (в часах)</h2>
+<hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Всего часов</div>
+            <div style="width:@cellCssWidth" class="info-cell">Нераспределенные часы</div>
+            <div style="width:@cellCssWidth" class="info-cell">Курс</div>
+            <div style="width:@cellCssWidth" class="info-cell">Семестр</div>
+            <div style="width:@cellCssWidth" class="info-cell">Предмет</div>
+            <div style="width:@cellCssWidth" class="info-cell">Учебная группа</div>
+            <div style="width:@cellCssWidth" class="info-cell">Форма контроля</div>
+            <div style="width:@cellCssWidth" class="info-cell">Вид занятий</div>
+        </div>
+        <div class="info-row">
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.TotalHours</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.RemainingHours</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.Course.Number</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.Semester.Number</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.Subject.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.StudyGroup.Name</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.FormOfControl.Name</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.TypeOfOccupation.Name</div>
+                    </div>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Имя</div>
+            <div style="width:@cellCssWidth" class="info-cell">Фамилия</div>
+            <div style="width:@cellCssWidth" class="info-cell">Отчество</div>
+        </div>
+        <div class="info-row">
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.Teacher.Name</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.Teacher.Surname</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.Teacher.Patronymic</div>
+                    </div>
+                    <hr />
+        <form class="form form-create" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Workload.TeacherId" value="@Model.Workload.TeacherId" />
+            <input type="hidden" asp-for="Workload.StudyPlanId" value="@Model.Workload.StudyPlanId" />
+            <input type="hidden" asp-for="Workload.Id" value="@Model.Workload.Id" />
+            <input type="hidden" name="initialTotalHours" value="@Model.Workload.TotalHours" />
+            <div class="form-group">
+                <label asp-for="Workload.TotalHours" class="control-label">Нагрузка (в часах)</label>
+                <input max="@(Model.Workload.StudyPlan.RemainingHours + Model.Workload.TotalHours)"  asp-for="Workload.TotalHours" class="form-control" />
+                <span asp-validation-for="Workload.TotalHours" class="text-danger"></span>
+            </div>
+
+            <div style="margin-top:10px;" class="form-group box">
+                <input type="submit" value="Edit" class="btn btn-success" />
+            </div>
+        </form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

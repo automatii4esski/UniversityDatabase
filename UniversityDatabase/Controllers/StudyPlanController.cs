@@ -20,13 +20,14 @@ namespace UniversityDatabase.Controllers
             _dbContext = dbContext;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string? isRenderForWorkload)
         {
             var studyPlanList = _dbContext.StudyPlans.Select(s =>
             new StudyPlan
             {
                 Id = s.Id,
                 TotalHours = s.TotalHours,
+                RemainingHours = s.RemainingHours,
                 Course = new Course { Number = s.Course.Number },
                 Semester = new Semester { Number = s.Semester.Number },
                 Subject = new Subject { Name = s.Subject.Name },
@@ -36,7 +37,7 @@ namespace UniversityDatabase.Controllers
             }).ToList();
 
 
-            var studyPlanViewModel = new StudyPlanIndexViewModel { StudyPlans = studyPlanList };
+            var studyPlanViewModel = new StudyPlanIndexViewModel {IsRenderForWorkload = isRenderForWorkload == null ? false : true, StudyPlans = studyPlanList };
 
             return View(studyPlanViewModel);
         }
@@ -68,7 +69,6 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(StudyPlan studyPlan)
         {
-           
             bool isCourseExist = _dbContext.Courses.Any(c => c.Id == studyPlan.CourseId);
             bool isSemesterExist = _dbContext.Semesters.Any(c => c.Id == studyPlan.SemesterId);
             bool isSubjectExist = _dbContext.Subjects.Any(c => c.Id == studyPlan.SubjectId);
@@ -81,6 +81,7 @@ namespace UniversityDatabase.Controllers
                 TempData["error"] = "error test";
                 return RedirectToAction(nameof(Index));
             }
+            studyPlan.RemainingHours = studyPlan.TotalHours;
 
             _dbContext.StudyPlans.Add(studyPlan);
 
@@ -125,7 +126,7 @@ namespace UniversityDatabase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(StudyPlan studyPlan)
+        public ActionResult Edit(StudyPlan studyPlan, int initialTotalHours)
         {
             bool isCourseExist = _dbContext.Courses.Any(c => c.Id == studyPlan.CourseId);
             bool isSemesterExist = _dbContext.Semesters.Any(c => c.Id == studyPlan.SemesterId);
@@ -139,6 +140,8 @@ namespace UniversityDatabase.Controllers
                 TempData["error"] = "error test";
                 return RedirectToAction(nameof(Index));
             }
+
+            studyPlan.RemainingHours += studyPlan.TotalHours - initialTotalHours;
 
             _dbContext.StudyPlans.Update(studyPlan);
             _dbContext.SaveChanges();

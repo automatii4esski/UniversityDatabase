@@ -35,6 +35,7 @@ namespace UniversityDatabase.Models
 
         [Column("salary")]
         [Required]
+        [Range(0, Int32.MaxValue)]
         public int Salary { get; set; }
 
         [Column("sex_id")]

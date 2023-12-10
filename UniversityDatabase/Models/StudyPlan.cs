@@ -13,7 +13,12 @@ namespace UniversityDatabase.Models
 
         [Column("total_hours")]
         [Required]
+        [Range(0, Int32.MaxValue)]
         public int TotalHours { get; set; }
+
+        [Column("remaining_hours")]
+        [Required]
+        public int RemainingHours { get; set; }
 
         [Column("course_id")]
         public byte CourseId { get; set; }

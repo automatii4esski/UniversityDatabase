@@ -25,26 +25,47 @@
             <div style="width:@cellCssWidth" class="info-cell">Date Of Birth</div>
             <div class="info-cell info-cell-actions">Actions</div>
         </div>
-    @foreach (var teacher in Model.Teachers)
-    {
-                    <div class="info-row">
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Department.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Salary</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.TeacherPosition.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Sex.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.Age</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@teacher.DateOfBirthUI</div>
-                                <div class="info-cell info-cell-actions">
-                                        <a asp-action="Edit" asp-route-id="@teacher.Id" class="btn btn-warning">Edit</a>
-                                        <form asp-route-id="@teacher.Id" asp-action="Delete">
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
+        @if(Model.StudyPlanIdForWorkload != null){
+        @foreach (var teacher in Model.Teachers)
+        {
+                            <div class="info-row">
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Department.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Salary</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.TeacherPosition.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Sex.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Age</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.DateOfBirthUI</div>
+                                        <div class="info-cell info-cell-actions">
+                                                <a asp-controller="Workload" asp-action="Create" asp-route-teacherId="@teacher.Id" asp-route-studyPlanId="@Model.StudyPlanIdForWorkload" class="btn btn-warning">Выбрать</a>
+                                        </div>
+                            </div>
+        }
+        }else{
+        @foreach (var teacher in Model.Teachers)
+        {
+                            <div class="info-row">
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Department.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Salary</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.TeacherPosition.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Sex.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Age</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.DateOfBirthUI</div>
+                                        <div class="info-cell info-cell-actions">
+                                                <a asp-action="Edit" asp-route-id="@teacher.Id" class="btn btn-warning">Edit</a>
+                                                <form asp-route-id="@teacher.Id" asp-action="Delete">
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
 
-                                </div>
-                    </div>
-    }
+                                        </div>
+                            </div>
+        }
+        }
+   
 
 </div>

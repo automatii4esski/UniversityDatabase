@@ -17,7 +17,7 @@ namespace UniversityDatabase.Controllers
             _dbContext = dbContext;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? studyPlanId)
         {
             var teacherList = _dbContext.Teachers.Select(t =>
             new Teacher
@@ -33,7 +33,7 @@ namespace UniversityDatabase.Controllers
                 DateOfBirth = t.DateOfBirth,
             }).ToList();
 
-            var teacherViewModel = new TeacherIndexViewModel { Teachers = teacherList };
+            var teacherViewModel = new TeacherIndexViewModel { StudyPlanIdForWorkload = studyPlanId, Teachers = teacherList };
 
             return View(teacherViewModel);
         }
@@ -57,6 +57,7 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Teacher teacher)
         {
+            
             bool isDepartmentExist = _dbContext.Departments.Any(s => s.Id == teacher.DepartmentId);
             bool isSexExist = _dbContext.Sexes.Any(s => s.Id == teacher.SexId);
             bool isTeacherPositionExist = _dbContext.TeacherPositions.Any(s => s.Id == teacher.TeacherPositionId);

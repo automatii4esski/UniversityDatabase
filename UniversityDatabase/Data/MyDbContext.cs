@@ -21,6 +21,7 @@ namespace UniversityDatabase.Data
         public DbSet<StudyPlan> StudyPlans { get; set; }
         public DbSet<GradeValue> GradeValues { get; set; }
         public DbSet<StudentGrade> StudentGrades { get; set; }
+        public DbSet<Workload> Workloads { get; set; }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 

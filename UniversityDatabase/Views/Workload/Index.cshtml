@@ -1,0 +1,50 @@
+﻿@model UniversityDatabase.ViewModels.Workload.WorkloadIndexViewModel;
+
+@{
+    string cellCssWidth = $"{90 / 10}%";
+} 
+
+
+<div>
+    <h2 class="info-title">Нагрузка преподавателей</h2>
+    <hr />
+    <div class="box">
+
+    <a class="btn btn-primary" asp-controller="StudyPlan" asp-route-isRenderForWorkload="true" asp-action="Index">Создать</a>
+    </div>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Name</div>
+            <div style="width:@cellCssWidth" class="info-cell">Surname</div>
+            <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
+            <div style="width:@cellCssWidth" class="info-cell">Subject</div>
+            <div style="width:@cellCssWidth" class="info-cell">Total Hours</div>
+            <div style="width:@cellCssWidth" class="info-cell">Course</div>
+            <div style="width:@cellCssWidth" class="info-cell">Semester</div>
+            <div style="width:@cellCssWidth" class="info-cell">Type of occupation</div>
+            <div style="width:@cellCssWidth" class="info-cell">Form of control</div>
+            <div class="info-cell info-cell-actions">Actions</div>
+        </div>
+    @foreach (var workload in Model.Workloads)
+    {
+                    <div class="info-row">
+                            <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Name</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Surname</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Patronymic</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Subject.Name</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@workload.TotalHours</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Course.Number</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Semester.Number</div>
+                                <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.TypeOfOccupation.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.FormOfControl.Name</div>
+                                <div class="info-cell info-cell-actions">
+                                        <a asp-action="Edit" asp-route-id="@workload.Id" class="btn btn-warning">Edit</a>
+                                        <form asp-route-id="@workload.Id" asp-action="Delete">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+
+                                </div>
+                    </div>
+    }
+
+</div>
