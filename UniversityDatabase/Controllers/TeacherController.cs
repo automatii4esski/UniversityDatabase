@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using NuGet.DependencyResolver;
 using UniversityDatabase.Data;
+using UniversityDatabase.Filters;
 using UniversityDatabase.Models;
 using UniversityDatabase.Seed;
+using UniversityDatabase.ViewModels.Student;
 using UniversityDatabase.ViewModels.Teacher;
 
 namespace UniversityDatabase.Controllers
@@ -15,6 +17,17 @@ namespace UniversityDatabase.Controllers
         public TeacherController(MyDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        private TeacherIndexViewModel GetIndexViewModelWithOptions()
+        {
+            var departmentOptions = _dbContext.Departments.ToDictionary(s => s.Id, s => s.Name);
+            var sexOptions = _dbContext.Sexes.ToDictionary(s => s.Id, s => s.Name);
+            var teacherPositionOptions = _dbContext.TeacherPositions.ToDictionary(s => s.Id, s => s.Name);
+
+            var teacherViewModel = new TeacherIndexViewModel {DepartmentOptions = departmentOptions, SexOptions = sexOptions, TeacherPositionOptions =teacherPositionOptions  };
+
+            return teacherViewModel;
         }
 
         public ActionResult Index(int? studyPlanId)
@@ -33,7 +46,41 @@ namespace UniversityDatabase.Controllers
                 DateOfBirth = t.DateOfBirth,
             }).ToList();
 
-            var teacherViewModel = new TeacherIndexViewModel { StudyPlanIdForWorkload = studyPlanId, Teachers = teacherList };
+            var teacherViewModel = GetIndexViewModelWithOptions();
+
+            teacherViewModel.Teachers = teacherList;
+            teacherViewModel.StudyPlanIdForWorkload = studyPlanId;
+
+            return View(teacherViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(int? studyPlanId, int? departmentId, byte? sexId, int? minAge, int? maxAge, int? maxSalary, int? minSalary, int? teacherPositionId)
+        {
+            var teacherList = _dbContext.Teachers.Select(t =>
+            new Teacher
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Surname = t.Surname,
+                Patronymic = t.Patronymic,
+                Sex = new Sex { Name = t.Sex.Name },
+                Salary = t.Salary,
+                TeacherPosition = new TeacherPosition { Name = t.TeacherPosition.Name },
+                TeacherPositionId = t.TeacherPositionId,
+                DepartmentId = t.DepartmentId,
+                SexId = t.SexId,
+                Department = new Department { Name = t.Department.Name },
+                DateOfBirth = t.DateOfBirth,
+            }).AsEnumerable();
+
+            var teacherViewModel = GetIndexViewModelWithOptions();
+            var filter = new TeacherFilter { DepartmentId = departmentId, SexId = sexId, TeacherPositionId = teacherPositionId, MaxAge = maxAge, MinAge = minAge, MaxSalary = maxSalary, MinSalary = minSalary };
+
+            teacherViewModel.Teachers = filter.GetFilteredTeachers(teacherList).ToList();
+            teacherViewModel.StudyPlanIdForWorkload = studyPlanId;
+            teacherViewModel.Filter = filter;
 
             return View(teacherViewModel);
         }

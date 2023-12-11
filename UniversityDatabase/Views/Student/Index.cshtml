@@ -8,6 +8,71 @@
 <div>
     <h2 class="info-title">Студенты</h2>
     <hr />
+    <form method="post" class="fx-row" asp-action="Index">
+        <input placeholder="возраст от" type="number" value="@Model.Filter.MinAge" min="0" name="minAge" />
+        <input placeholder="возраст до" type="number" value="@Model.Filter.MaxAge" name="maxAge" />
+        <select class="form-select" name="studyGroupId">
+            <option selected value="">Учебная Группа</option>
+            @foreach (var item in Model.StudyGroupOptions)
+                {
+                if (Model.Filter.StudyGroupId == @item.Key)
+                {
+                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                    <option value="@item.Key">@item.Value</option>
+                }
+                }
+        </select>
+
+        <select class="form-select" name="sexId">
+               <option selected value="">Пол</option>
+            @foreach (var item in Model.SexOptions)
+                {
+                if (Model.Filter.SexId == @item.Key)
+                {
+                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                    <option value="@item.Key">@item.Value</option>
+                }
+                }
+        </select>
+
+        <select class="form-select" name="courseId">
+               <option selected value="">Курс</option>
+            @foreach (var item in Model.CourseOptions)
+            {
+                if (Model.Filter.CourseId == @item.Key)
+                {
+                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+         <select class="form-select" name="facultyId">
+               <option selected value="">Факультет</option>
+            @foreach (var item in Model.FacultyOptions)
+            {
+                if (Model.Filter.FacultyId == @item.Key)
+                {
+                         <option selected value="@item.Key">@item.Value</option>
+                }
+                else{
+                            <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+         <input type="submit" value="Применить" class="btn btn-success" />
+    </form>
+    <hr />
     <div class="box">
 
     <a class="btn btn-primary" asp-action="Create">Создать</a>

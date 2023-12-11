@@ -6,7 +6,61 @@
 
 
 <div>
-    <h2 class="info-title">Преаодаватели</h2>
+    <h2 class="info-title">Преподаватели</h2>
+    <hr />
+    <form method="post" class="fx-row" asp-action="Index">
+        <input placeholder="возраст от" type="number" value="@Model.Filter.MinAge" min="0" name="minAge" />
+        <input type="hidden" name="studyPlanId" value="@Model.StudyPlanIdForWorkload" />
+        <input placeholder="возраст до" type="number" value="@Model.Filter.MaxAge" name="maxAge" />
+        <input placeholder="зарплата от" type="number" value="@Model.Filter.MinSalary" min="0" name="minSalary" />
+        <input placeholder="зарплата до" type="number" value="@Model.Filter.MaxSalary" name="maxSalary" />
+        <select class="form-select" name="departmentId">
+            <option selected value="">Кафедра</option>
+            @foreach (var item in Model.DepartmentOptions)
+            {
+                if (Model.Filter.DepartmentId == @item.Key)
+                {
+                                         <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                            <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" name="sexId">
+               <option selected value="">Пол</option>
+            @foreach (var item in Model.SexOptions)
+            {
+                if (Model.Filter.SexId == @item.Key)
+                {
+                                         <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                            <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" name="teacherPositionId">
+               <option selected value="">Тип</option>
+            @foreach (var item in Model.TeacherPositionOptions)
+            {
+                if (Model.Filter.TeacherPositionId == @item.Key)
+                {
+                                         <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                            <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+         <input type="submit" value="Применить" class="btn btn-success" />
+    </form>
     <hr />
     <div class="box">
 

@@ -101,3 +101,7 @@ body {
 .alert-hide {
     animation: alert-hide 0.7s forwards;
 }
+
+.fx-row{
+    display:flex;
+}

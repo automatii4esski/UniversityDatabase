@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UniversityDatabase.Data;
+using UniversityDatabase.Filters;
 using UniversityDatabase.Models;
 using UniversityDatabase.Seed;
 using UniversityDatabase.ViewModels.Student;
@@ -17,8 +19,27 @@ namespace UniversityDatabase.Controllers
             _dbContext = dbContext;
         }
 
+        private StudentIndexViewModel GetIndexViewModelWithOptions()
+        {
+            var sexOptions = _dbContext.Sexes.ToDictionary(s => s.Id, s => s.Name);
+            var StudyGroupOptions = _dbContext.StudyGroups.ToDictionary(s => s.Id, s => s.Name);
+            var CourseOptions = _dbContext.Courses.ToDictionary(s => s.Id, s => s.Number);
+            var facultyOptions = _dbContext.Faculties.ToDictionary(s => s.Id, s => s.Name);
+
+            var studentViewModel = new StudentIndexViewModel
+            {
+                SexOptions = sexOptions,
+                StudyGroupOptions = StudyGroupOptions,
+                CourseOptions = CourseOptions,
+                FacultyOptions = facultyOptions,
+            };
+
+            return studentViewModel;
+        }
+
         public ActionResult Index()
         {
+
             var studentList = _dbContext.Students.Select(s =>
             new Student
             {
@@ -29,15 +50,41 @@ namespace UniversityDatabase.Controllers
                 Sex = new Sex { Name = s.Sex.Name },
                 DateOfBirth = s.DateOfBirth,
                 StudyGroup = new StudyGroup { Name = s.StudyGroup.Name },
+                StudyGroupId = s.StudyGroupId
             }).ToList();
 
-            var seed = new MySeed(_dbContext);
+            var studentViewModel = GetIndexViewModelWithOptions();
+            studentViewModel.Students = studentList;
 
-            seed.CreateFormOfControls();
-            seed.CreateSubjects();
-            seed.CreateTypeOfOccupations();
+            return View(studentViewModel);
+        }
 
-            var studentViewModel = new StudentIndexViewModel { Students = studentList };
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(int? studyGroupId, byte? sexId, byte? courseId, int? facultyId, int? minAge, int? maxAge)
+        {
+            var studentList = _dbContext.Students.Select(s =>
+            new Student
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Surname = s.Surname,
+                Patronymic = s.Patronymic,
+                Sex = new Sex { Name = s.Sex.Name },
+                DateOfBirth = s.DateOfBirth,
+                StudyGroup = new StudyGroup { Name = s.StudyGroup.Name, FacultyId = s.StudyGroup.FacultyId, CourseId = s.StudyGroup.CourseId },
+                SexId = s.SexId,
+                StudyGroupId = s.StudyGroupId
+            }).AsEnumerable();
+
+
+            var filter = new StudentFilter { MinAge = minAge, MaxAge = maxAge, StudyGroupId = studyGroupId, SexId = sexId, CourseId = courseId, FacultyId = facultyId};
+            var filteredStudents = filter.GetFilteredStudents(studentList).ToList();
+
+            var studentViewModel = GetIndexViewModelWithOptions();
+            studentViewModel.Filter = filter;
+            studentViewModel.Students = filteredStudents;
+
 
             return View(studentViewModel);
         }
