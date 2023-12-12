@@ -8,6 +8,86 @@
 <div>
     <h2 class="info-title">Оценки студентов</h2>
     <hr />
+    <form method="post" class="fx-row" asp-action="Index">
+        <select class="form-select" name="studyGroupId">
+            <option selected value="">Учебная группа</option>
+            @foreach (var item in Model.StudyGroupOptions)
+            {
+                if (Model.Filter.StudyGroupId == @item.Key)
+                {
+                                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" name="subjectId">
+               <option selected value="">Предмет</option>
+            @foreach (var item in Model.SubjectOptions)
+            {
+                if (Model.Filter.SubjectId == @item.Key)
+                {
+                                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" name="courseId">
+               <option selected value="">Курс</option>
+            @foreach (var item in Model.CourseOptions)
+            {
+                if (Model.Filter.CourseId == @item.Key)
+                {
+                                                         <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                            <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" name="semesterId">
+               <option selected value="">Семестр</option>
+            @foreach (var item in Model.SemesterOptions)
+            {
+                if (Model.Filter.SemesterId == @item.Key)
+                {
+                                                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" multiple name="gradeValueId">
+               <option selected >Оценка</option>
+            @foreach (var item in Model.GradeValueOptions)
+            {
+                if (Model.Filter.GradeValueId.Any(g => g == @item.Key))
+                {
+                                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+            <option value="">Нет оценки</option>
+        </select>
+
+         <input type="submit" value="Применить" class="btn btn-success" />
+    </form>
+    <hr />
     <div class="box">
 
     </div>

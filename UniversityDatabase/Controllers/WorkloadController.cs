@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using NuGet.DependencyResolver;
 using UniversityDatabase.Data;
+using UniversityDatabase.Filters;
 using UniversityDatabase.Models;
 using UniversityDatabase.Seed;
+using UniversityDatabase.ViewModels.Student;
 using UniversityDatabase.ViewModels.Teacher;
 using UniversityDatabase.ViewModels.Workload;
 
@@ -16,6 +18,24 @@ namespace UniversityDatabase.Controllers
         public WorkloadController(MyDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        private WorkloadIndexViewModel GetIndexViewModelWithOptions()
+        {
+            var StudyGroupOptions = _dbContext.StudyGroups.ToDictionary(s => s.Id, s => s.Name);
+            var CourseOptions = _dbContext.Courses.ToDictionary(s => s.Id, s => s.Number);
+            var SemesterOptions = _dbContext.Semesters.ToDictionary(s => s.Id, s => s.Number);
+            var typeOfOccupationOptions = _dbContext.TypeOfOccupations.ToDictionary(s => s.Id, s => s.Name);
+
+            var workloadViewModel = new WorkloadIndexViewModel
+            {
+                StudyGroupOptions = StudyGroupOptions,
+                CourseOptions = CourseOptions,
+                SemesterOptions = SemesterOptions,
+                TypeOfOccupationOptions = typeOfOccupationOptions
+            };
+
+            return workloadViewModel;
         }
 
         public ActionResult Index()
@@ -31,11 +51,47 @@ namespace UniversityDatabase.Controllers
                     Subject = new Subject { Name = w.StudyPlan.Subject.Name},
                     TypeOfOccupation = new TypeOfOccupation { Name = w.StudyPlan.TypeOfOccupation.Name },
                     FormOfControl = new FormOfControl { Name = w.StudyPlan.FormOfControl.Name },
+                    StudyGroup = new StudyGroup { Name = w.StudyPlan.StudyGroup.Name },
                 }
 
             }).ToList();
 
-            var workloadViewModel = new WorkloadIndexViewModel { Workloads = workloadList };
+            var workloadViewModel = GetIndexViewModelWithOptions();
+            workloadViewModel.Workloads = workloadList;
+
+            return View(workloadViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(byte? courseId, byte? semesterId, int? studyGroupId, int? typeOfOccupationId)
+        {
+            var workloadList = _dbContext.Workloads.Select(w =>
+            new Workload
+            {
+                Id = w.Id,
+                Teacher = new Teacher { Name = w.Teacher.Name, Surname = w.Teacher.Surname, Patronymic = w.Teacher.Patronymic },
+                TotalHours = w.TotalHours,
+                StudyPlan = new StudyPlan
+                {
+                    Course = new Course { Number = w.StudyPlan.Course.Number },
+                    CourseId = w.StudyPlan.CourseId,
+                    SemesterId = w.StudyPlan.SemesterId,
+                    StudyGroupId = w.StudyPlan.StudyGroupId,
+                    TypeOfOccupationId = w.StudyPlan.TypeOfOccupationId,
+                    Semester = new Semester { Number = w.StudyPlan.Semester.Number },
+                    Subject = new Subject { Name = w.StudyPlan.Subject.Name },
+                    TypeOfOccupation = new TypeOfOccupation { Name = w.StudyPlan.TypeOfOccupation.Name },
+                    FormOfControl = new FormOfControl { Name = w.StudyPlan.FormOfControl.Name },
+                    StudyGroup = new StudyGroup { Name = w.StudyPlan.StudyGroup.Name },
+                }
+
+            }).AsEnumerable();
+
+            var filter = new WorkloadFilter { CourseId = courseId, SemesterId = semesterId, StudyGroupId = studyGroupId, TypeOfOccupationId= typeOfOccupationId };
+            var workloadViewModel = GetIndexViewModelWithOptions();
+            workloadViewModel.Workloads = filter.GetFilteredWorkloads(workloadList).ToList();
+            workloadViewModel.Filter = filter;
 
             return View(workloadViewModel);
         }

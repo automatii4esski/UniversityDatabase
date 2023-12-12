@@ -46,6 +46,7 @@ namespace UniversityDatabase.Seed
 
                 _dbContext.GradeValues.Add(new GradeValue { FormOfControlId = testFormOfControlId, Value = gradeValuesTest[i] });
             }
+
             _dbContext.SaveChanges();
         }
 

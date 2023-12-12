@@ -8,6 +8,70 @@
 <div>
     <h2 class="info-title">Нагрузка преподавателей</h2>
     <hr />
+    <form method="post" class="fx-row" asp-action="Index">
+        <select class="form-select" name="courseId">
+            <option selected value="">Курс</option>
+            @foreach (var item in Model.CourseOptions)
+            {
+                if (Model.Filter.CourseId == @item.Key)
+                {
+                                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" name="semesterId">
+            <option selected value="">Семестр</option>
+            @foreach (var item in Model.SemesterOptions)
+            {
+                if (Model.Filter.SemesterId == @item.Key)
+                {
+                                                         <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                            <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+        <select class="form-select" name="typeOfOccupationId">
+            <option selected value="">Вид занятий</option>
+            @foreach (var item in Model.TypeOfOccupationOptions)
+            {
+                if (Model.Filter.TypeOfOccupationId == @item.Key)
+                {
+                                                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+         <select class="form-select" name="studyGroupId">
+            <option selected value="">Учебная группа</option>
+            @foreach (var item in Model.StudyGroupOptions)
+            {
+                if (Model.Filter.StudyGroupId == @item.Key)
+                {
+                                                                 <option selected value="@item.Key">@item.Value</option>
+                }
+                else
+                {
+                                                                    <option value="@item.Key">@item.Value</option>
+                }
+            }
+        </select>
+
+         <input type="submit" value="Применить" class="btn btn-success" />
+    </form>
+    <hr />
     <div class="box">
 
     <a class="btn btn-primary" asp-controller="StudyPlan" asp-route-isRenderForWorkload="true" asp-action="Index">Создать</a>
@@ -20,6 +84,7 @@
             <div style="width:@cellCssWidth" class="info-cell">Subject</div>
             <div style="width:@cellCssWidth" class="info-cell">Total Hours</div>
             <div style="width:@cellCssWidth" class="info-cell">Course</div>
+            <div style="width:@cellCssWidth" class="info-cell">Study Group</div>
             <div style="width:@cellCssWidth" class="info-cell">Semester</div>
             <div style="width:@cellCssWidth" class="info-cell">Type of occupation</div>
             <div style="width:@cellCssWidth" class="info-cell">Form of control</div>
@@ -34,6 +99,7 @@
                             <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Subject.Name</div>
                                 <div style="width:@cellCssWidth" class="info-cell">@workload.TotalHours</div>
                             <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Course.Number</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.StudyGroup.Name</div>
                                 <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Semester.Number</div>
                                 <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.TypeOfOccupation.Name</div>
                             <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.FormOfControl.Name</div>
