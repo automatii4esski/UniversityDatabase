@@ -186,7 +186,7 @@ namespace UniversityDatabase.Controllers
             return workloadList;
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, string? backUrl)
         {
             var workload = _dbContext.Workloads.Find(id);
 
@@ -223,14 +223,14 @@ namespace UniversityDatabase.Controllers
             workload.StudyPlan = studyPlan;
             var otherWorkloadList = GetOtherWorkloadsOfStudyPlan(studyPlan.Id);
 
-            var workloadViewModel = new WorkloadCreateViewModel {OtherWorkloads = otherWorkloadList, Workload = workload };
+            var workloadViewModel = new WorkloadCreateViewModel {BackUrl = backUrl, OtherWorkloads = otherWorkloadList, Workload = workload };
 
             return View(workloadViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Workload workload, int initialTotalHours)
+        public ActionResult Edit(Workload workload, int initialTotalHours, string? backUrl)
         {
             var studyPlan = _dbContext.StudyPlans.Find(workload.StudyPlanId);
             bool isTeacherExist = _dbContext.Teachers.Any(t => t.Id == workload.TeacherId);
@@ -254,12 +254,12 @@ namespace UniversityDatabase.Controllers
             _dbContext.StudyPlans.Update(studyPlan);
             _dbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+            return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, string? isRedirectBack)
+        public ActionResult Delete(int id, string? backUrl)
         {
             var workload = _dbContext.Workloads.Find(id);
 
@@ -277,11 +277,7 @@ namespace UniversityDatabase.Controllers
 
             var previusUrl = Request.Headers["Referer"].ToString();
 
-            if (isRedirectBack != null && previusUrl != null)
-            {
-                return Redirect(previusUrl);
-            }
-            return RedirectToAction(nameof(Index));
+            return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
         }
     }
 }

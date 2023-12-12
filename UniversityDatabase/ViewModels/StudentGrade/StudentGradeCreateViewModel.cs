@@ -5,5 +5,6 @@
     {
         public StudentGrade StudentGrade { get; set; } = new();
         public Dictionary<byte, string> GradeValueOptions = new();
+        public string? BackUrl { get; set; }
     }
 }

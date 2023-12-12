@@ -85,6 +85,44 @@ namespace UniversityDatabase.Controllers
             return View(teacherViewModel);
         }
 
+        public ActionResult Details(int id)
+        {
+            var teacher = _dbContext.Teachers.Select(t =>
+            new Teacher
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Surname = t.Surname,
+                Patronymic = t.Patronymic,
+                Sex = new Sex { Name = t.Sex.Name },
+                Salary = t.Salary,
+                TeacherPosition = new TeacherPosition { Name = t.TeacherPosition.Name },
+                Department = new Department { Name = t.Department.Name },
+                DateOfBirth = t.DateOfBirth,
+            }).FirstOrDefault(t => t.Id == id);
+
+            if(teacher == null) return RedirectToAction(nameof(Index));
+
+            var workloads = _dbContext.Workloads.Where(w => w.TeacherId == id).Select(w => new Workload
+            {
+                Id = w.Id,
+                TotalHours = w.TotalHours,
+                StudyPlan = new StudyPlan
+                {
+                    Course = new Course { Number = w.StudyPlan.Course.Number },
+                    Semester = new Semester { Number = w.StudyPlan.Semester.Number },
+                    Subject = new Subject { Name = w.StudyPlan.Subject.Name },
+                    TypeOfOccupation = new TypeOfOccupation { Name = w.StudyPlan.TypeOfOccupation.Name },
+                    FormOfControl = new FormOfControl { Name = w.StudyPlan.FormOfControl.Name },
+                    StudyGroup = new StudyGroup { Name = w.StudyPlan.StudyGroup.Name },
+                }
+            }).ToList();
+
+            var viewModel = new TeacherDetailsViewModel { Teacher = teacher, Workloads = workloads };
+
+            return View(viewModel);
+        }
+
 
         public ActionResult Create()
         {

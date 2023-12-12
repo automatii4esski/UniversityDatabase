@@ -42,6 +42,7 @@
             <input type="hidden" asp-for="Workload.TeacherId" value="@Model.Workload.TeacherId" />
             <input type="hidden" asp-for="Workload.StudyPlanId" value="@Model.Workload.StudyPlanId" />
             <input type="hidden" asp-for="Workload.Id" value="@Model.Workload.Id" />
+            <input type="hidden" name="backUrl" value="@Model.BackUrl" />
             <input type="hidden" name="initialTotalHours" value="@Model.Workload.TotalHours" />
             <div class="form-group">
                 <label asp-for="Workload.TotalHours" class="control-label">Нагрузка (в часах)</label>
@@ -73,7 +74,7 @@
                                                     <div style="width:@cellCssWidth" class="info-cell">@workload.TotalHours</div>
                                                             <div class="info-cell info-cell-actions">
                                                 <a asp-action="Edit" asp-route-id="@workload.Id" class="btn btn-warning">Edit</a>
-                                                <form asp-route-id="@workload.Id" asp-route-isRedirectBack="true" asp-action="Delete">
+                                                        <form asp-route-id="@workload.Id" asp-route-backUrl="@Context.Request.Path" asp-action="Delete">
                                                             <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
 

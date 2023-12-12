@@ -95,7 +95,7 @@ namespace UniversityDatabase.Controllers
             return View(studentGradeViewModel);
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, string? backUrl)
         {
             var studentGrade = _dbContext.StudentGrades.Include(s => s.StudyPlan).FirstOrDefault( s=> s.Id == id);
 
@@ -103,14 +103,14 @@ namespace UniversityDatabase.Controllers
 
             var gradeValueOptions = _dbContext.GradeValues.Where(s => s.FormOfControlId == studentGrade.StudyPlan.FormOfControlId).ToDictionary(s => s.Id, s => s.Value);
 
-            var studentGradeCreateViewModel = new StudentGradeCreateViewMode { StudentGrade = studentGrade, GradeValueOptions = gradeValueOptions };
+            var studentGradeCreateViewModel = new StudentGradeCreateViewMode { StudentGrade = studentGrade, GradeValueOptions = gradeValueOptions, BackUrl = backUrl };
 
             return View(studentGradeCreateViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(StudentGrade studentGrade)
+        public ActionResult Edit(StudentGrade studentGrade, string? backUrl)
         {
             bool isGradeValueExist = _dbContext.GradeValues.Any(s => s.Id == studentGrade.GradeValueId);
 
@@ -123,7 +123,7 @@ namespace UniversityDatabase.Controllers
             _dbContext.StudentGrades.Update(studentGrade);
             _dbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+            return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
         }
     }
 }

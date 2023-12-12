@@ -68,6 +68,7 @@
     </div>
     <hr />
     <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell"></div>
             <div style="width:@cellCssWidth" class="info-cell">Name</div>
             <div style="width:@cellCssWidth" class="info-cell">Surname</div>
             <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
@@ -76,13 +77,13 @@
             <div style="width:@cellCssWidth" class="info-cell">Position</div>
             <div style="width:@cellCssWidth" class="info-cell">Sex</div>
             <div style="width:@cellCssWidth" class="info-cell">Age</div>
-            <div style="width:@cellCssWidth" class="info-cell">Date Of Birth</div>
             <div class="info-cell info-cell-actions">Actions</div>
         </div>
         @if(Model.StudyPlanIdForWorkload != null){
         @foreach (var teacher in Model.Teachers)
         {
                             <div class="info-row">
+                                            <div style="width:@cellCssWidth" class="info-cell"><a asp-action="Details" asp-route-id="@teacher.Id" type="submit" class="btn btn-primary">О преподавателе</a></div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>
@@ -91,7 +92,6 @@
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.TeacherPosition.Name</div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Sex.Name</div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Age</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.DateOfBirthUI</div>
                                         <div class="info-cell info-cell-actions">
                                                 <a asp-controller="Workload" asp-action="Create" asp-route-teacherId="@teacher.Id" asp-route-studyPlanId="@Model.StudyPlanIdForWorkload" class="btn btn-warning">Выбрать</a>
                                         </div>
@@ -101,6 +101,7 @@
         @foreach (var teacher in Model.Teachers)
         {
                             <div class="info-row">
+                                        <div style="width:@cellCssWidth" class="info-cell"><a asp-action="Details" asp-route-id="@teacher.Id" type="submit" class="btn btn-primary">О преподавателе</a></div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
                                     <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>

@@ -79,25 +79,25 @@
     </div>
     <hr />
     <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell"></div>
             <div style="width:@cellCssWidth" class="info-cell">Name</div>
             <div style="width:@cellCssWidth" class="info-cell">Surname</div>
             <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
             <div style="width:@cellCssWidth" class="info-cell">Study Group</div>
             <div style="width:@cellCssWidth" class="info-cell">Sex</div>
             <div style="width:@cellCssWidth" class="info-cell">Age</div>
-            <div style="width:@cellCssWidth" class="info-cell">Date Of Birth</div>
             <div class="info-cell info-cell-actions">Actions</div>
         </div>
     @foreach (var student in Model.Students)
     {
                     <div class="info-row">
+                                <div style="width:@cellCssWidth" class="info-cell"><a asp-action="Details" asp-route-id="@student.Id" type="submit" class="btn btn-primary">О студенте</a></div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.Name</div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.Surname</div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.Patronymic</div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.StudyGroup.Name</div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.Sex.Name</div>
                             <div style="width:@cellCssWidth" class="info-cell">@student.Age</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@student.DateOfBirthUI</div>
                                 <div class="info-cell info-cell-actions">
                                         <a asp-action="Edit" asp-route-id="@student.Id" class="btn btn-warning">Edit</a>
                                         <form asp-route-id="@student.Id" asp-action="Delete">

@@ -7,6 +7,7 @@
             <input value="@Model.StudentGrade.Id" type="hidden" asp-for="StudentGrade.Id" />
             <input value="@Model.StudentGrade.StudentId" type="hidden" asp-for="StudentGrade.StudentId" />
             <input value="@Model.StudentGrade.StudyPlanId" type="hidden" asp-for="StudentGrade.StudyPlanId" />
+            <input value="@Model.BackUrl" type="hidden" name="backUrl" />
             <div class="form-group">
                 <label asp-for="StudentGrade.GradeValueId" class="control-label">Оценка</label>
                 <select class="form-select" asp-for="StudentGrade.GradeValueId">

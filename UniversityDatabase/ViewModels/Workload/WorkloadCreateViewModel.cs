@@ -6,5 +6,6 @@
     {
         public Workload Workload { get; set; } = new();
         public List<Workload> OtherWorkloads = new();
+        public string? BackUrl { get; set; }
     }
 }

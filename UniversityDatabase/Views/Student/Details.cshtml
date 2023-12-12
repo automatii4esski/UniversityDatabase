@@ -1,0 +1,54 @@
+﻿@model UniversityDatabase.ViewModels.Student.StudentDetailsViewModel;
+
+@{
+    string cellCssWidth = $"{100 / 7}%";
+} 
+
+
+<div>
+    <h2 class="info-title">О студенте</h2>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Name</div>
+            <div style="width:@cellCssWidth" class="info-cell">Surname</div>
+            <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
+            <div style="width:@cellCssWidth" class="info-cell">Study Group</div>
+            <div style="width:@cellCssWidth" class="info-cell">Sex</div>
+            <div style="width:@cellCssWidth" class="info-cell">Age</div>
+            <div style="width:@cellCssWidth" class="info-cell">Course</div>
+            <div style="width:@cellCssWidth" class="info-cell">Faculty</div>
+        </div>
+                    <div class="info-row">
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Surname</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Patronymic</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.StudyGroup.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Sex.Name</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Age</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.StudyGroup.Course.Number</div>
+                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.StudyGroup.Faculty.Name</div>
+                    </div>
+                    <hr />
+                    <h2 class="info-title">Оценки</h2>
+    <hr />
+    <div class="info-row info-row-title">
+            <div style="width:@cellCssWidth" class="info-cell">Курс</div>
+            <div style="width:@cellCssWidth" class="info-cell">Семестр</div>
+            <div style="width:@cellCssWidth" class="info-cell">Предмет</div>
+            <div style="width:@cellCssWidth" class="info-cell">Оценка</div>
+            <div class="info-cell info-cell-actions">Actions</div>
+        </div>
+        @foreach(var grade in Model.StudentGrades){
+                 <div class="info-row">
+                                    <div style="width:@cellCssWidth" class="info-cell">@grade.StudyPlan.Course.Number</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@grade.StudyPlan.Semester.Number</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@grade.StudyPlan.Subject.Name</div>
+                                    <div style="width:@cellCssWidth" class="info-cell">@grade.Grade</div>
+                                        <div class="info-cell info-cell-actions">
+                                        <a asp-controller="StudentGrade" asp-action="Edit" asp-route-backUrl="@Context.Request.Path" asp-route-id="@grade.Id" class="btn btn-warning">Установить оценку</a>
+                                </div>
+                        </div>
+        }
+                   
+
+</div>

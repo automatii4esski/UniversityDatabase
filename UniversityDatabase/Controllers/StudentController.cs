@@ -89,6 +89,38 @@ namespace UniversityDatabase.Controllers
             return View(studentViewModel);
         }
 
+        public ActionResult Details(int id)
+        {
+            var student = _dbContext.Students.Select(s =>
+            new Student
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Surname = s.Surname,
+                Patronymic = s.Patronymic,
+                Sex = new Sex { Name = s.Sex.Name },
+                DateOfBirth = s.DateOfBirth,
+                StudyGroup = new StudyGroup { Name = s.StudyGroup.Name, Faculty = new Faculty { Name = s.StudyGroup.Faculty.Name}, Course = new Course {Number = s.StudyGroup.Course.Number } },
+            }).FirstOrDefault(s => s.Id == id);
+
+            if (student == null) return RedirectToAction(nameof(Index));
+
+            var studentGrades = _dbContext.StudentGrades.Where(s => s.StudentId == id).Select(s =>
+            new StudentGrade
+            {
+                Id = s.Id,
+                GradeValue = new GradeValue { Value = s.GradeValue.Value },
+                StudyPlan = new StudyPlan
+                {
+                    Course = new Course { Number = s.StudyPlan.Course.Number },
+                    Semester = new Semester { Number = s.StudyPlan.Semester.Number },
+                    Subject = new Subject { Name = s.StudyPlan.Subject.Name },
+                }
+            }).ToList();
+            var viewModel = new StudentDetailsViewModel { Student = student, StudentGrades = studentGrades };
+
+            return View(viewModel);
+        }
 
         public ActionResult Create()
         {
