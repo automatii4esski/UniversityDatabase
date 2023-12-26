@@ -87,7 +87,10 @@ namespace UniversityDatabase.Controllers
 
         public ActionResult Details(int id)
         {
-            var teacher = _dbContext.Teachers.Select(t =>
+            
+            try
+            {
+                var teacher = _dbContext.Teachers.Select(t =>
             new Teacher
             {
                 Id = t.Id,
@@ -101,26 +104,33 @@ namespace UniversityDatabase.Controllers
                 DateOfBirth = t.DateOfBirth,
             }).FirstOrDefault(t => t.Id == id);
 
-            if(teacher == null) return RedirectToAction(nameof(Index));
+                if (teacher == null) throw new Exception("No teacher found");
 
-            var workloads = _dbContext.Workloads.Where(w => w.TeacherId == id).Select(w => new Workload
-            {
-                Id = w.Id,
-                TotalHours = w.TotalHours,
-                StudyPlan = new StudyPlan
+                var workloads = _dbContext.Workloads.Where(w => w.TeacherId == id).Select(w => new Workload
                 {
-                    Course = new Course { Number = w.StudyPlan.Course.Number },
-                    Semester = new Semester { Number = w.StudyPlan.Semester.Number },
-                    Subject = new Subject { Name = w.StudyPlan.Subject.Name },
-                    TypeOfOccupation = new TypeOfOccupation { Name = w.StudyPlan.TypeOfOccupation.Name },
-                    FormOfControl = new FormOfControl { Name = w.StudyPlan.FormOfControl.Name },
-                    StudyGroup = new StudyGroup { Name = w.StudyPlan.StudyGroup.Name },
-                }
-            }).ToList();
+                    Id = w.Id,
+                    TotalHours = w.TotalHours,
+                    StudyPlan = new StudyPlan
+                    {
+                        Course = new Course { Number = w.StudyPlan.Course.Number },
+                        Semester = new Semester { Number = w.StudyPlan.Semester.Number },
+                        Subject = new Subject { Name = w.StudyPlan.Subject.Name },
+                        TypeOfOccupation = new TypeOfOccupation { Name = w.StudyPlan.TypeOfOccupation.Name },
+                        FormOfControl = new FormOfControl { Name = w.StudyPlan.FormOfControl.Name },
+                        StudyGroup = new StudyGroup { Name = w.StudyPlan.StudyGroup.Name },
+                    }
+                }).ToList();
 
-            var viewModel = new TeacherDetailsViewModel { Teacher = teacher, Workloads = workloads };
+                var viewModel = new TeacherDetailsViewModel { Teacher = teacher, Workloads = workloads };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (Exception e)
+            {
+
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
 
@@ -142,74 +152,89 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Teacher teacher)
         {
-            
-            bool isDepartmentExist = _dbContext.Departments.Any(s => s.Id == teacher.DepartmentId);
-            bool isSexExist = _dbContext.Sexes.Any(s => s.Id == teacher.SexId);
-            bool isTeacherPositionExist = _dbContext.TeacherPositions.Any(s => s.Id == teacher.TeacherPositionId);
-
-            if (!isDepartmentExist || !isSexExist || !isTeacherPositionExist)
+            try
             {
-                TempData["error"] = "error test";
+                _dbContext.Teachers.Add(teacher);
+                _dbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception e)
+            {
 
-            _dbContext.Teachers.Add(teacher);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public ActionResult Edit(int id)
         {
-            var teacher = _dbContext.Teachers.Find(id);
+            
+            try
+            {
+                var teacher = _dbContext.Teachers.First(t => t.Id == id);
 
-            if (teacher == null) return RedirectToAction(nameof(Index));
+                var departmentOptions = _dbContext.Departments.ToDictionary(s => s.Id, s => s.Name);
+                var sexOptions = _dbContext.Sexes.ToDictionary(s => s.Id, s => s.Name);
+                var teacherPositionOptions = _dbContext.TeacherPositions.ToDictionary(s => s.Id, s => s.Name);
 
-            var departmentOptions = _dbContext.Departments.ToDictionary(s => s.Id, s => s.Name);
-            var sexOptions = _dbContext.Sexes.ToDictionary(s => s.Id, s => s.Name);
-            var teacherPositionOptions = _dbContext.TeacherPositions.ToDictionary(s => s.Id, s => s.Name);
+                var teacherViewModel = new TeacherCreateViewModel
+                {
+                    Teacher = teacher,
+                    TeacherPositionOptions = teacherPositionOptions,
+                    SexOptions = sexOptions,
+                    DepartmentOptions = departmentOptions
+                };
 
-            var teacherViewModel = new TeacherCreateViewModel { 
-                Teacher = teacher, 
-                TeacherPositionOptions = teacherPositionOptions, 
-                SexOptions = sexOptions, 
-                DepartmentOptions = departmentOptions };
+                return View(teacherViewModel);
+            }
+            catch (Exception e)
+            {
 
-            return View(teacherViewModel);
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Teacher teacher)
         {
-            bool isDepartmentExist = _dbContext.Departments.Any(s => s.Id == teacher.DepartmentId);
-            bool isSexExist = _dbContext.Sexes.Any(s => s.Id == teacher.SexId);
-            bool isTeacherPositionExist = _dbContext.TeacherPositions.Any(s => s.Id == teacher.TeacherPositionId);
-
-            if (!isDepartmentExist || !isSexExist || !isTeacherPositionExist)
+            try
             {
-                TempData["error"] = "error test";
+                _dbContext.Teachers.Update(teacher);
+                _dbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception e)
+            {
 
-            _dbContext.Teachers.Update(teacher);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var teacher = _dbContext.Teachers.Find(id);
+            try
+            {
+                var teacher = _dbContext.Teachers.First(t => t.Id == id);
 
-            if (teacher == null) return RedirectToAction(nameof(Index));
+                _dbContext.Teachers.Remove(teacher);
+                _dbContext.SaveChanges();
 
-            _dbContext.Teachers.Remove(teacher);
-            _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
 
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            } 
+            
         }
     }
 }

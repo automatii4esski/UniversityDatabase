@@ -37,47 +37,58 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Faculty faculty)
         {
-            bool isDeanExist = _dbContext.Deans.Any(d => d.Id == faculty.DeanId);
+            try
+            {
+                _dbContext.Faculties.Add(faculty);
+                _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
 
-            if (!isDeanExist) {
-                TempData["error"] = "error test";
-              return  RedirectToAction(nameof(Index));
-            } 
-
-            _dbContext.Faculties.Add(faculty);
-            _dbContext.SaveChanges();
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public ActionResult Edit(int id)
         {
-           var faculty = _dbContext.Faculties.Find(id);
+            try
+            {
+                var faculty = _dbContext.Faculties.First(f=> f.Id == id);
 
-            if (faculty == null)return RedirectToAction(nameof(Index));
+                var densOptions = _dbContext.Deans.ToDictionary(d => d.Id, d => d.Name);
 
-            var densOptions = _dbContext.Deans.ToDictionary(d => d.Id, d => d.Name);
+                var facultyViewModel = new FacultyCreateViewModel { Faculty = faculty, DeansOptions = densOptions };
 
+                return View(facultyViewModel);
+            }
+            catch (Exception e)
+            {
 
-            var facultyViewModel = new FacultyCreateViewModel { Faculty = faculty, DeansOptions = densOptions };
-
-            return View(facultyViewModel);
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Faculty faculty)
         {
-            bool isDeanExist = _dbContext.Deans.Any(d => d.Id == faculty.DeanId);
+            
+            try
+            {
+                _dbContext.Faculties.Update(faculty);
+                _dbContext.SaveChanges();
 
-            if (!isDeanExist) {
-                TempData["error"] = "error test";
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception e)
+            {
 
-            _dbContext.Faculties.Update(faculty);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
 
@@ -85,14 +96,22 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var faculty = _dbContext.Faculties.Find(id);
+            
+            try
+            {
+                var faculty = _dbContext.Faculties.First(f=> f.Id==id);
 
-            if (faculty == null) return RedirectToAction(nameof(Index));
+                _dbContext.Faculties.Remove(faculty);
+                _dbContext.SaveChanges();
 
-            _dbContext.Faculties.Remove(faculty);
-            _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
 
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

@@ -47,63 +47,82 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Department department)
         {
-            bool isFacultyExist = _dbContext.Faculties.Any(d => d.Id == department.FacultyId);
-
-            if (!isFacultyExist)
+            try
             {
-                TempData["error"] = "error test";
+                _dbContext.Departments.Add(department);
+                _dbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception e)
+            {
 
-            _dbContext.Departments.Add(department);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public ActionResult Edit(int id)
         {
-            var department = _dbContext.Departments.Find(id);
+            
+            try
+            {
+                var department = _dbContext.Departments.First(d => d.Id == id);
 
-            if (department == null) return RedirectToAction(nameof(Index));
+                var facultyOptions = _dbContext.Faculties.ToDictionary(d => d.Id, d => d.Name);
 
-            var facultyOptions = _dbContext.Faculties.ToDictionary(d => d.Id, d => d.Name);
+                var departmentViewModel = new DepartmentCreateViewModel { Department = department, FacultyOptions = facultyOptions };
 
-            var departmentViewModel = new DepartmentCreateViewModel { Department = department, FacultyOptions = facultyOptions };
+                return View(departmentViewModel);
+            }
+            catch (Exception e)
+            {
 
-            return View(departmentViewModel);
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Department department)
         {
-            bool isFacultyExist = _dbContext.Faculties.Any(d => d.Id == department.FacultyId);
-
-            if (!isFacultyExist)
+            
+            try
             {
-                TempData["error"] = "error test";
+                _dbContext.Departments.Update(department);
+                _dbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception e)
+            {
 
-            _dbContext.Departments.Update(department);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var department = _dbContext.Departments.Find(id);
+            
+            try
+            {
+                var department = _dbContext.Departments.First(d=> d.Id==id);
 
-            if (department == null) return RedirectToAction(nameof(Index));
+                _dbContext.Departments.Remove(department);
+                _dbContext.SaveChanges();
 
-            _dbContext.Departments.Remove(department);
-            _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
 
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

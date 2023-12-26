@@ -143,29 +143,26 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Workload workload)
         {
-            
-            var studyPlan = _dbContext.StudyPlans.FirstOrDefault(s => s.Id == workload.StudyPlanId);
-            bool isTeacherExist = _dbContext.Teachers.Any(t => t.Id == workload.TeacherId);
-
-            if (studyPlan == null || !isTeacherExist)
+            try
             {
-                TempData["error"] = "error test";
+                var studyPlan = _dbContext.StudyPlans.First(s => s.Id == workload.StudyPlanId);
+
+                studyPlan.RemainingHours -= workload.TotalHours;
+
+                if (studyPlan.RemainingHours < 0) throw new Exception("No remaining hours");
+
+                _dbContext.StudyPlans.Update(studyPlan);
+                _dbContext.Workloads.Add(workload);
+                _dbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
-
-            studyPlan.RemainingHours -= workload.TotalHours;
-
-            if (studyPlan.RemainingHours < 0)
+            catch (Exception e)
             {
-                TempData["error"] = "error test";
+
+                TempData["error"] = e.Message;
                 return RedirectToAction(nameof(Index));
             }
-
-            _dbContext.StudyPlans.Update(studyPlan);
-            _dbContext.Workloads.Add(workload);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
         }
 
         private List<Workload> GetOtherWorkloadsOfStudyPlan(int studyPlanId)
@@ -188,96 +185,103 @@ namespace UniversityDatabase.Controllers
 
         public ActionResult Edit(int id, string? backUrl)
         {
-            var workload = _dbContext.Workloads.Find(id);
-
-            if (workload == null) return RedirectToAction(nameof(Index));
-
-            var studyPlan = _dbContext.StudyPlans.Select(s => new StudyPlan
+            try
             {
-                Id = s.Id,
-                TotalHours = s.TotalHours,
-                RemainingHours = s.RemainingHours,
-                Course = new Course { Number = s.Course.Number },
-                Semester = new Semester { Number = s.Semester.Number },
-                Subject = new Subject { Name = s.Subject.Name },
-                StudyGroup = new StudyGroup { Name = s.StudyGroup.Name },
-                FormOfControl = new FormOfControl { Name = s.FormOfControl.Name },
-                TypeOfOccupation = new TypeOfOccupation { Name = s.TypeOfOccupation.Name }
-            }).FirstOrDefault(s => s.Id == workload.StudyPlanId);
+                var workload = _dbContext.Workloads.First(w => w.Id == id);
 
-            var teacher = _dbContext.Teachers.Select(t => new Teacher
-            {
-                Id = t.Id,
-                Name = t.Name,
-                Surname = t.Surname,
-                Patronymic = t.Patronymic,
-            }).FirstOrDefault(t => t.Id == workload.TeacherId);
+                var studyPlan = _dbContext.StudyPlans.Select(s => new StudyPlan
+                {
+                    Id = s.Id,
+                    TotalHours = s.TotalHours,
+                    RemainingHours = s.RemainingHours,
+                    Course = new Course { Number = s.Course.Number },
+                    Semester = new Semester { Number = s.Semester.Number },
+                    Subject = new Subject { Name = s.Subject.Name },
+                    StudyGroup = new StudyGroup { Name = s.StudyGroup.Name },
+                    FormOfControl = new FormOfControl { Name = s.FormOfControl.Name },
+                    TypeOfOccupation = new TypeOfOccupation { Name = s.TypeOfOccupation.Name }
+                }).FirstOrDefault(s => s.Id == workload.StudyPlanId);
 
-            if (studyPlan == null || teacher == null)
+                var teacher = _dbContext.Teachers.Select(t => new Teacher
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Surname = t.Surname,
+                    Patronymic = t.Patronymic,
+                }).FirstOrDefault(t => t.Id == workload.TeacherId);
+
+                if (studyPlan == null || teacher == null) throw new Exception("No studyplan or teacher");
+
+                workload.Teacher = teacher;
+                workload.StudyPlan = studyPlan;
+                var otherWorkloadList = GetOtherWorkloadsOfStudyPlan(studyPlan.Id);
+
+                var workloadViewModel = new WorkloadCreateViewModel { BackUrl = backUrl, OtherWorkloads = otherWorkloadList, Workload = workload };
+
+                return View(workloadViewModel);
+            }
+            catch (Exception e)
             {
-                TempData["error"] = "error test";
+
+                TempData["error"] = e.Message;
                 return RedirectToAction(nameof(Index));
             }
-
-            workload.Teacher = teacher;
-            workload.StudyPlan = studyPlan;
-            var otherWorkloadList = GetOtherWorkloadsOfStudyPlan(studyPlan.Id);
-
-            var workloadViewModel = new WorkloadCreateViewModel {BackUrl = backUrl, OtherWorkloads = otherWorkloadList, Workload = workload };
-
-            return View(workloadViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Workload workload, int initialTotalHours, string? backUrl)
         {
-            var studyPlan = _dbContext.StudyPlans.Find(workload.StudyPlanId);
-            bool isTeacherExist = _dbContext.Teachers.Any(t => t.Id == workload.TeacherId);
-
-            if (studyPlan == null || !isTeacherExist)
+            try
             {
-                TempData["error"] = "error test";
+                var studyPlan = _dbContext.StudyPlans.First( s=> s.Id == workload.StudyPlanId);
+
+                var totalHoursDiff = initialTotalHours - workload.TotalHours;
+                studyPlan.RemainingHours += totalHoursDiff;
+
+                if (studyPlan.RemainingHours < 0) throw new Exception("No remaining hours");
+
+                _dbContext.Workloads.Update(workload);
+                _dbContext.StudyPlans.Update(studyPlan);
+                _dbContext.SaveChanges();
+
+                return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
+            }
+            catch (Exception e)
+            {
+
+                TempData["error"] = e.Message;
                 return RedirectToAction(nameof(Index));
             }
-
-            var totalHoursDiff = initialTotalHours - workload.TotalHours;
-            studyPlan.RemainingHours += totalHoursDiff;
-
-            if (studyPlan.RemainingHours < 0)
-            {
-                TempData["error"] = "error test";
-                return RedirectToAction(nameof(Index));
-            }
-
-            _dbContext.Workloads.Update(workload);
-            _dbContext.StudyPlans.Update(studyPlan);
-            _dbContext.SaveChanges();
-
-            return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, string? backUrl)
         {
-            var workload = _dbContext.Workloads.Find(id);
 
-            if (workload == null) return RedirectToAction(nameof(Index));
+            try
+            {
+                var workload = _dbContext.Workloads.First(w => w.Id == id);
 
-            var studyPlan = _dbContext.StudyPlans.Find(workload.StudyPlanId);
+                var studyPlan = _dbContext.StudyPlans.First( s=> s.Id == workload.StudyPlanId);
 
-            if (studyPlan == null) return RedirectToAction(nameof(Index));
+                studyPlan.RemainingHours += workload.TotalHours;
 
-            studyPlan.RemainingHours += workload.TotalHours;
+                _dbContext.Workloads.Remove(workload);
+                _dbContext.StudyPlans.Update(studyPlan);
+                _dbContext.SaveChanges();
 
-            _dbContext.Workloads.Remove(workload);
-            _dbContext.StudyPlans.Update(studyPlan);
-            _dbContext.SaveChanges();
+                var previusUrl = Request.Headers["Referer"].ToString();
 
-            var previusUrl = Request.Headers["Referer"].ToString();
+                return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
+            }
+            catch (Exception e)
+            {
 
-            return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

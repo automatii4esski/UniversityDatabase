@@ -97,33 +97,42 @@ namespace UniversityDatabase.Controllers
 
         public ActionResult Edit(int id, string? backUrl)
         {
-            var studentGrade = _dbContext.StudentGrades.Include(s => s.StudyPlan).FirstOrDefault( s=> s.Id == id);
+            
+            try
+            {
+                var studentGrade = _dbContext.StudentGrades.Include(s => s.StudyPlan).First(s => s.Id == id);
 
-            if (studentGrade == null) return RedirectToAction(nameof(Index));
+                var gradeValueOptions = _dbContext.GradeValues.Where(s => s.FormOfControlId == studentGrade.StudyPlan.FormOfControlId).ToDictionary(s => s.Id, s => s.Value);
 
-            var gradeValueOptions = _dbContext.GradeValues.Where(s => s.FormOfControlId == studentGrade.StudyPlan.FormOfControlId).ToDictionary(s => s.Id, s => s.Value);
+                var studentGradeCreateViewModel = new StudentGradeCreateViewMode { StudentGrade = studentGrade, GradeValueOptions = gradeValueOptions, BackUrl = backUrl };
 
-            var studentGradeCreateViewModel = new StudentGradeCreateViewMode { StudentGrade = studentGrade, GradeValueOptions = gradeValueOptions, BackUrl = backUrl };
+                return View(studentGradeCreateViewModel);
+            }
+            catch (Exception e)
+            {
 
-            return View(studentGradeCreateViewModel);
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(StudentGrade studentGrade, string? backUrl)
         {
-            bool isGradeValueExist = _dbContext.GradeValues.Any(s => s.Id == studentGrade.GradeValueId);
-
-            if (!isGradeValueExist)
+            try
             {
-                TempData["error"] = "error test";
+                _dbContext.StudentGrades.Update(studentGrade);
+                _dbContext.SaveChanges();
+
+                return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
+            }
+            catch (Exception e)
+            {
+
+                TempData["error"] = e.Message;
                 return RedirectToAction(nameof(Index));
             }
-
-            _dbContext.StudentGrades.Update(studentGrade);
-            _dbContext.SaveChanges();
-
-            return backUrl == null ? RedirectToAction(nameof(Index)) : Redirect(backUrl);
         }
     }
 }

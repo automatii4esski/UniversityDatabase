@@ -34,30 +34,58 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Dean dean)
         {
-            _dbContext.Deans.Add(dean);
-            _dbContext.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            
+            try
+            {
+                _dbContext.Deans.Add(dean);
+                _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public ActionResult Edit(int id)
         {
-           var dean = _dbContext.Deans.Find(id);
+           
+            try
+            {
+                var dean = _dbContext.Deans.First(d=> d.Id == id);
 
-            if (dean == null)return RedirectToAction(nameof(Index));
+                var deanViewModel = new DeanCreateViewModel { Dean = dean };
 
-            var deanViewModel = new DeanCreateViewModel { Dean = dean };
+                return View(deanViewModel);
+            }
+            catch (Exception e)
+            {
 
-            return View(deanViewModel);
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Dean dean)
         {
-            _dbContext.Deans.Update(dean);
-            _dbContext.SaveChanges();
+            
+            try
+            {
+                _dbContext.Deans.Update(dean);
+                _dbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
 
@@ -66,14 +94,21 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var dean = _dbContext.Deans.Find(id);
+            try
+            {
+                var dean = _dbContext.Deans.First(d=>d.Id==id);
 
-            if (dean == null) return RedirectToAction(nameof(Index));
+                _dbContext.Deans.Remove(dean);
+                _dbContext.SaveChanges();
 
-            _dbContext.Deans.Remove(dean);
-            _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
 
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

@@ -25,6 +25,12 @@ namespace UniversityDatabase.Data
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 
-
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Model.GetEntityTypes()
+                .SelectMany(entityType => entityType.GetForeignKeys())
+                .ToList()
+                .ForEach(foreignKey => foreignKey.DeleteBehavior = DeleteBehavior.Restrict);
+        }
     }
 }

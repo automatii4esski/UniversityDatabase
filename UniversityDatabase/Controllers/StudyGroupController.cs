@@ -49,66 +49,83 @@ namespace UniversityDatabase.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(StudyGroup studyGroup)
         {
-            bool isFacultyExist = _dbContext.Faculties.Any(d => d.Id == studyGroup.FacultyId);
-            bool isCourseExist = _dbContext.Courses.Any(c => c.Id == studyGroup.CourseId);
-
-            if (!isFacultyExist || !isCourseExist)
+            try
             {
-                TempData["error"] = "error test";
+                _dbContext.StudyGroups.Add(studyGroup);
+                _dbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception e)
+            {
 
-            _dbContext.StudyGroups.Add(studyGroup);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public ActionResult Edit(int id)
         {
-            var studyGroup = _dbContext.StudyGroups.Find(id);
+            try
+            {
+                var studyGroup = _dbContext.StudyGroups.First(s=> s.Id==id);
 
-            if (studyGroup == null) return RedirectToAction(nameof(Index));
+                var facultyOptions = _dbContext.Faculties.ToDictionary(d => d.Id, d => d.Name);
+                var coursesOptions = _dbContext.Courses.ToDictionary(d => d.Id, d => d.Number);
 
-            var facultyOptions = _dbContext.Faculties.ToDictionary(d => d.Id, d => d.Name);
-            var coursesOptions = _dbContext.Courses.ToDictionary(d => d.Id, d => d.Number);
+                var studyGroupViewModel = new StudyGroupCreateViewModel { StudyGroup = studyGroup, FacultyOptions = facultyOptions, CourseOptions = coursesOptions };
 
-            var studyGroupViewModel = new StudyGroupCreateViewModel { StudyGroup = studyGroup, FacultyOptions = facultyOptions, CourseOptions = coursesOptions };
+                return View(studyGroupViewModel);
+            }
+            catch (Exception e)
+            {
 
-            return View(studyGroupViewModel);
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(StudyGroup studyGroup)
         {
-            bool isFacultyExist = _dbContext.Faculties.Any(d => d.Id == studyGroup.FacultyId);
-            bool isCourseExist = _dbContext.Courses.Any(c => c.Id == studyGroup.CourseId);
-
-            if (!isFacultyExist || !isCourseExist)
+           
+            try
             {
-                TempData["error"] = "error test";
+
+                _dbContext.StudyGroups.Update(studyGroup);
+                _dbContext.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+            catch (Exception e)
+            {
 
-            _dbContext.StudyGroups.Update(studyGroup);
-            _dbContext.SaveChanges();
-
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var studyGroup = _dbContext.StudyGroups.Find(id);
+            
+            try
+            {
+                var studyGroup = _dbContext.StudyGroups.First( s=> s.Id== id);
 
-            if (studyGroup == null) return RedirectToAction(nameof(Index));
+                _dbContext.StudyGroups.Remove(studyGroup);
+                _dbContext.SaveChanges();
 
-            _dbContext.StudyGroups.Remove(studyGroup);
-            _dbContext.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
 
-            return RedirectToAction(nameof(Index));
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }
