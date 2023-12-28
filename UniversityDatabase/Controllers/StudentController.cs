@@ -232,6 +232,9 @@ namespace UniversityDatabase.Controllers
             {
                 var student = _dbContext.Students.First( s=> s.Id == id);
 
+                var studentGrades = _dbContext.StudentGrades.Where(s => s.StudentId == id);
+                _dbContext.StudentGrades.RemoveRange(studentGrades);
+
                 _dbContext.Students.Remove(student);
                 _dbContext.SaveChanges();
 
