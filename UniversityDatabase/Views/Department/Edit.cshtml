@@ -1,48 +1,60 @@
 ﻿@model UniversityDatabase.ViewModels.Department.DepartmentCreateViewModel;
 
-<h2 class="info-title">Редактировать Кафедру</h2>
-    <hr />
-        <form class="form form-create" asp-action="Edit">
+<section class="form-section section">
+    <div class="container">
+        <div class="form-section-inner">
+            <div class="form-section-head">
+                <h1 class="form-section-title">Редактировать Кафедру</h1>
+                <a class="form-section-back" asp-action="Index">Вернуться</a>
+            </div>
+            <form class="form form-create" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input value="@Model.Department.Id" type="hidden" asp-for="Department.Id" />
-            <div class="form-group">
-                <label asp-for="Department.Name" class="control-label">Название</label>
-                <input value="@Model.Department.Name" asp-for="Department.Name" class="form-control" />
-                <span asp-validation-for="Department.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Department.Phone" class="control-label">Телефон</label>
-                <input value="@Model.Department.Phone" asp-for="Department.Phone" class="form-control" />
-                <span asp-validation-for="Department.Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Department.FacultyId" class="control-label">Деканат</label>
-                <select class="form-select" asp-for="Department.FacultyId">
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Название</h3>
+                    <input value="@Model.Department.Name" placeholder="Введите название" asp-for="Department.Name" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Department.Name" class="form-group-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Телефон</h3>
+                    <input value="@Model.Department.Phone" placeholder="Введите телефон" asp-for="Department.Phone" class="form-control" />
+                    </label>
+                <span asp-validation-for="Department.Phone" class="form-group-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Факультет</h3>
+                    <select class="form-control form-select" asp-for="Department.FacultyId">
                     <option hidden selected value="">Select</option>
 
-            @foreach (var faculty in Model.FacultyOptions)
-            {
-                if (Model.Department.FacultyId == faculty.Key)
-                {
-                       <option selected value="@faculty.Key" >@faculty.Value</option>
-                }
-                else
-                {
-                        <option value="@faculty.Key" >@faculty.Value</option>
-                }
-            }
+                            @foreach (var faculty in Model.FacultyOptions)
+                            {
+                                if (Model.Department.FacultyId == faculty.Key)
+                                {
+                               <option selected value="@faculty.Key" >@faculty.Value</option>
+                                }
+                                else
+                                {
+                                <option value="@faculty.Key" >@faculty.Value</option>
+                                }
+                            }
                 </select>
-                <span asp-validation-for="Department.FacultyId" class="text-danger"></span>
-            </div>
+                    </label>
+                <span asp-validation-for="Department.FacultyId" class="form-group-danger"></span>
+                </div>
 
-            <div style="margin-top:10px;" class="form-group box">
-                <input type="submit" value="Edit" class="btn btn-success" />
+            <div class="form-section__submit-wrapper">
+                <button type="submit" class="form-section__submit-btn">Сохранить</button>
             </div>
         </form>
+        </div>
+    </div>
+</section>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{

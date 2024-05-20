@@ -2,7 +2,25 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="home">
+    <div class="container">
+        <div class="home__inner">
+            <a asp-controller="Student" asp-action="Index" class="home__item">
+                <img class="home__photo"  asp-append-version="true" src="./content/students.jpg" />
+                <div class="home__item-title">Студенты</div>
+            </a>
+             <a asp-controller="Teacher" asp-action="Index" class="home__item">
+                <img class="home__photo"  asp-append-version="true" src="./content/teachers.jpg" />
+                <div class="home__item-title">Преподаватели</div>
+            </a>
+             <a asp-controller="StudyPlan" asp-action="Index" class="home__item">
+                <img class="home__photo"  asp-append-version="true" src="./content/studyplan.jpg" />
+                <div class="home__item-title">Учебный план</div>
+            </a>
+             <a asp-controller="Workload" asp-action="Index" class="home__item">
+                <img class="home__photo"  asp-append-version="true" src="./content/workload.jpg" />
+                <div class="home__item-title">Нагрузка</div>
+            </a>
+        </div>
+    </div>
+</section>

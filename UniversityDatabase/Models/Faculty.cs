@@ -10,8 +10,7 @@ namespace UniversityDatabase.Models
     public class Faculty
     {
         [Column("id")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Column("name")]

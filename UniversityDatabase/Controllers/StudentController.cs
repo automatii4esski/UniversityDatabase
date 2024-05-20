@@ -8,16 +8,20 @@ using UniversityDatabase.Seed;
 using UniversityDatabase.ViewModels.Student;
 using UniversityDatabase.ViewModels.StudentGrade;
 using UniversityDatabase.ViewModels.StudyGroup;
+using UniversityDatabase.Helpers;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace UniversityDatabase.Controllers
 {
     public class StudentController : Controller
     {
         private MyDbContext _dbContext;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public StudentController(MyDbContext dbContext)
+        public StudentController(MyDbContext dbContext, IWebHostEnvironment hostingEnvironment)
         {
             _dbContext = dbContext;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         private StudentIndexViewModel GetIndexViewModelWithOptions()
@@ -50,6 +54,7 @@ namespace UniversityDatabase.Controllers
                 Patronymic = s.Patronymic,
                 Sex = new Sex { Name = s.Sex.Name },
                 DateOfBirth = s.DateOfBirth,
+                PhotoUrl = s.PhotoUrl,
                 StudyGroup = new StudyGroup { Name = s.StudyGroup.Name },
                 StudyGroupId = s.StudyGroupId
             }).ToList();
@@ -73,6 +78,7 @@ namespace UniversityDatabase.Controllers
                 Patronymic = s.Patronymic,
                 Sex = new Sex { Name = s.Sex.Name },
                 DateOfBirth = s.DateOfBirth,
+                PhotoUrl = s.PhotoUrl,
                 StudyGroup = new StudyGroup { Name = s.StudyGroup.Name, FacultyId = s.StudyGroup.FacultyId, CourseId = s.StudyGroup.CourseId },
                 SexId = s.SexId,
                 StudyGroupId = s.StudyGroupId
@@ -102,6 +108,7 @@ namespace UniversityDatabase.Controllers
                 Name = s.Name,
                 Surname = s.Surname,
                 Patronymic = s.Patronymic,
+                PhotoUrl = s.PhotoUrl,
                 Sex = new Sex { Name = s.Sex.Name },
                 DateOfBirth = s.DateOfBirth,
                 StudyGroup = new StudyGroup { Name = s.StudyGroup.Name, Faculty = new Faculty { Name = s.StudyGroup.Faculty.Name }, Course = new Course { Number = s.StudyGroup.Course.Number } },
@@ -143,19 +150,22 @@ namespace UniversityDatabase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Student student)
+        public ActionResult Create(StudentCreateViewModel viewModel)
         {
             
             try
             {
-                var studyPlansIdOfNewStudyGroup = _dbContext.StudyPlans.Where(s => s.StudyGroupId == student.StudyGroupId).Select(s => s.Id);
+                var studyPlansIdOfNewStudyGroup = _dbContext.StudyPlans.Where(s => s.StudyGroupId == viewModel.Student.StudyGroupId).Select(s => s.Id);
 
-                _dbContext.Students.Add(student);
+                string? photoName = FileHelper.SavePhoto(_hostingEnvironment, viewModel.Photo);
+                viewModel.Student.PhotoUrl = photoName;
+
+                _dbContext.Students.Add(viewModel.Student);
                 _dbContext.SaveChanges();
 
                 foreach (var studyPlan in studyPlansIdOfNewStudyGroup)
                 {
-                    _dbContext.StudentGrades.Add(new StudentGrade { StudentId = student.Id, StudyPlanId = studyPlan });
+                    _dbContext.StudentGrades.Add(new StudentGrade { StudentId = viewModel.Student.Id, StudyPlanId = studyPlan });
                 }
 
                 _dbContext.SaveChanges();
@@ -167,6 +177,40 @@ namespace UniversityDatabase.Controllers
 
                 TempData["error"] = e.Message;
                 return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public ActionResult ChangePhoto(int id)
+        {
+            var viewModel = new StudentChangePhotoViewModel { StudentId = id };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePhoto(StudentChangePhotoViewModel viewModel)
+        {
+            try
+            {
+                var photoName = FileHelper.SavePhoto(_hostingEnvironment, viewModel.Photo);
+
+                var student = _dbContext.Students.First(s => s.Id == viewModel.StudentId);
+
+                FileHelper.DeletePhoto(_hostingEnvironment, student.PhotoUrl);
+
+                student.PhotoUrl = photoName;
+
+                _dbContext.Students.Update(student);
+
+                _dbContext.SaveChanges();
+
+                return RedirectToAction(nameof(Details), new { id = viewModel.StudentId });
+            }
+            catch (Exception e)
+            {
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Details), new {id = viewModel.StudentId});
             }
         }
 
@@ -194,33 +238,33 @@ namespace UniversityDatabase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Student student, int initialStudyGroupId)
+        public ActionResult Edit(StudentCreateViewModel viewModel, int initialStudyGroupId)
         {
             try
             {
-                if (student.StudyGroupId != initialStudyGroupId)
+                if (viewModel.Student.StudyGroupId != initialStudyGroupId)
                 {
-                    var studentGrades = _dbContext.StudentGrades.Where(s => s.StudentId == student.Id);
+                    var studentGrades = _dbContext.StudentGrades.Where(s => s.StudentId == viewModel.Student.Id);
                     _dbContext.StudentGrades.RemoveRange(studentGrades);
 
-                    var studyPlansIdOfNewStudyGroup = _dbContext.StudyPlans.Where(s => s.StudyGroupId == student.StudyGroupId).Select(s => s.Id);
+                    var studyPlansIdOfNewStudyGroup = _dbContext.StudyPlans.Where(s => s.StudyGroupId == viewModel.Student.StudyGroupId).Select(s => s.Id);
 
                     foreach (var studyPlan in studyPlansIdOfNewStudyGroup)
                     {
-                        _dbContext.StudentGrades.Add(new StudentGrade { StudentId = student.Id, StudyPlanId = studyPlan });
+                        _dbContext.StudentGrades.Add(new StudentGrade { StudentId = viewModel.Student.Id, StudyPlanId = studyPlan });
                     }
                 }
 
-                _dbContext.Students.Update(student);
+                _dbContext.Students.Update(viewModel.Student);
                 _dbContext.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = viewModel.Student.Id });
             }
             catch (Exception e)
             {
 
                 TempData["error"] = e.Message;
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = viewModel.Student.Id });
             }
         }
 
@@ -231,6 +275,8 @@ namespace UniversityDatabase.Controllers
             try
             {
                 var student = _dbContext.Students.First( s=> s.Id == id);
+
+                FileHelper.DeletePhoto(_hostingEnvironment, student.PhotoUrl);
 
                 var studentGrades = _dbContext.StudentGrades.Where(s => s.StudentId == id);
                 _dbContext.StudentGrades.RemoveRange(studentGrades);

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using UniversityDatabase.Config;
+using UniversityDatabase.Helpers;
 
 namespace UniversityDatabase.Models
 {
@@ -41,6 +41,9 @@ namespace UniversityDatabase.Models
         [Column("sex_id")]
         public byte SexId { get; set; }
         public virtual Sex Sex { get; set; }
+
+        [Column("photo_url")]
+        public string? PhotoUrl { get; set; }
 
         [Column("department_id")]
         public int DepartmentId { get; set; }

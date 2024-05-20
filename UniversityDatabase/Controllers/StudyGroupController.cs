@@ -26,7 +26,7 @@ namespace UniversityDatabase.Controllers
                 Id = s.Id,
                 Name = s.Name,
                 RecruitmentYear = s.RecruitmentYear,
-                Faculty = new Faculty { Name = s.Faculty.Name },
+                Faculty = new Faculty { Name = s.Faculty.Name, Dean = s.Faculty.Dean },
                 Course = new Course { Number = s.Course.Number },
             }).ToList();
 

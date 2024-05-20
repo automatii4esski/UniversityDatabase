@@ -1,90 +1,120 @@
 ﻿@model UniversityDatabase.ViewModels.StudyPlan.StudyPlanCreateViewModel;
 
-<h2 class="info-title">Создать Учебный план</h2>
-    <hr />
-        <form class="form form-create" asp-action="Create">
+<section class="form-section section">
+    <div class="container">
+        <div class="form-section-inner">
+            <div class="form-section-head">
+                <h1 class="form-section-title">Создать Учебный план</h1>
+                <a class="form-section-back" asp-action="Index">Вернуться</a>
+            </div>
+
+            <form class="form form-create" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="StudyPlan.TotalHours" class="control-label">Кол-во часов</label>
-                <input asp-for="StudyPlan.TotalHours" class="form-control" />
-                <span asp-validation-for="StudyPlan.TotalHours" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudyPlan.CourseId" class="control-label">Курс</label>
-                <select class="form-select" asp-for="StudyPlan.CourseId">
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Кол-во часов</h3>
+                    <input asp-for="StudyPlan.TotalHours" class="form-control" />
+                    </label>
+                    <span asp-validation-for="StudyPlan.TotalHours" class="form-group-danger"></span>
+                </div>
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Курс</h3>
+                <select class="form-select form-control" asp-for="StudyPlan.CourseId">
                     <option hidden selected value="">Select</option>
 
-                        @foreach (var course in Model.CourseOptions)
-                        {
+                            @foreach (var course in Model.CourseOptions)
+                            {
 
-                                 <option value="@course.Key" >@course.Value</option>
-                        }
+                                     <option value="@course.Key" >@course.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="StudyPlan.CourseId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudyPlan.SemesterId" class="control-label">Семестр</label>
-                <select class="form-select" asp-for="StudyPlan.SemesterId">
+                    </label>
+                    <span asp-validation-for="StudyPlan.CourseId" class="form-group-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Семестр</h3>
+                <select class="form-select form-control" asp-for="StudyPlan.SemesterId">
                     <option hidden selected value="">Select</option>
-                        @foreach (var semester in Model.SemesterOptions)
-                        {
-                              <option value="@semester.Key" >@semester.Value</option>
-                        }
+
+                            @foreach (var semester in Model.SemesterOptions)
+                            {
+                                  <option value="@semester.Key" >@semester.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="StudyPlan.SemesterId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudyPlan.SubjectId" class="control-label">Предмет</label>
-                <select class="form-select" asp-for="StudyPlan.SubjectId">
+                    </label>
+                    <span asp-validation-for="StudyPlan.SemesterId" class="form-group-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Предмет</h3>
+                <select class="form-select form-control" asp-for="StudyPlan.SubjectId">
                     <option hidden selected value="">Select</option>
-            @foreach (var subject in Model.SubjectOptions)
-            {
-                                  <option value="@subject.Key" >@subject.Value</option>
-            }
+
+                            @foreach (var subject in Model.SubjectOptions)
+                            {
+                                      <option value="@subject.Key" >@subject.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="StudyPlan.SubjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudyPlan.StudyGroupId" class="control-label">Учебная группа</label>
-                <select class="form-select" asp-for="StudyPlan.StudyGroupId">
+                    </label>
+                    <span asp-validation-for="StudyPlan.SubjectId" class="form-group-danger"></span>
+                </div>
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Учебная группа</h3>
+                <select class="form-select form-control" asp-for="StudyPlan.StudyGroupId">
                     <option hidden selected value="">Select</option>
-            @foreach (var studyGroup in Model.StudyGroupOptions)
-            {
-                                      <option value="@studyGroup.Key" >@studyGroup.Value</option>
-            }
+
+                            @foreach (var studyGroup in Model.StudyGroupOptions)
+                            {
+                                          <option value="@studyGroup.Key" >@studyGroup.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="StudyPlan.StudyGroupId" class="text-danger"></span>
-            </div>
-             <div class="form-group">
-                <label asp-for="StudyPlan.FormOfControlId" class="control-label">Форма контроля</label>
-                <select class="form-select" asp-for="StudyPlan.FormOfControlId">
+                    </label>
+                    <span asp-validation-for="StudyPlan.StudyGroupId" class="form-group-danger"></span>
+                </div>
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Форма контроля</h3>
+                <select class="form-select form-control" asp-for="StudyPlan.FormOfControlId">
                     <option hidden selected value="">Select</option>
-            @foreach (var formOfControl in Model.FormOfControlOptions)
-            {
-                                          <option value="@formOfControl.Key" >@formOfControl.Value</option>
-            }
+                            @foreach (var formOfControl in Model.FormOfControlOptions)
+                            {
+                                              <option value="@formOfControl.Key" >@formOfControl.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="StudyPlan.FormOfControlId" class="text-danger"></span>
-            </div>
-             <div class="form-group">
-                <label asp-for="StudyPlan.TypeOfOccupationId" class="control-label">Вид занятий</label>
-                <select class="form-select" asp-for="StudyPlan.TypeOfOccupationId">
+                    </label>
+                    <span asp-validation-for="StudyPlan.FormOfControlId" class="form-group-danger"></span>
+                </div>
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Вид занятий</h3>
+                <select class="form-select form-control" asp-for="StudyPlan.TypeOfOccupationId">
                     <option hidden selected value="">Select</option>
-            @foreach (var typeOfOccupation in Model.TypeOfOccupationOptions)
-            {
-                                              <option value="@typeOfOccupation.Key" >@typeOfOccupation.Value</option>
-            }
+                            @foreach (var typeOfOccupation in Model.TypeOfOccupationOptions)
+                            {
+                                                  <option value="@typeOfOccupation.Key" >@typeOfOccupation.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="StudyPlan.TypeOfOccupationId" class="text-danger"></span>
-            </div>
-            <div style="margin-top:10px;" class="form-group box">
-                <input type="submit" value="Create" class="btn btn-success" />
+                    </label>
+                    <span asp-validation-for="StudyPlan.TypeOfOccupationId" class="form-group-danger"></span>
+                </div>
+
+            <div class="form-section__submit-wrapper">
+                <button type="submit" class="form-section__submit-btn">Сохранить</button>
             </div>
         </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     @{

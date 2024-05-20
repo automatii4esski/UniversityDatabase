@@ -1,68 +1,61 @@
 ﻿@model UniversityDatabase.ViewModels.StudyPlan.StudyPlanIndexViewModel;
 
-@{
-    string cellCssWidth = $"{90 / 7}%";
-} 
 
-
-<div>
-    <h2 class="info-title">Учебный план</h2>
-    <hr />
-    <div class="box">
-
-    <a class="btn btn-primary" asp-action="Create">Создать</a>
+<section class="department section">
+    <div class="section__head">
+        <h2 class="title">Учебный план</h2>
     </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Кол-во часов</div>
-            <div style="width:@cellCssWidth" class="info-cell">Нераспределенные часы</div>
-            <div style="width:@cellCssWidth" class="info-cell">Курс</div>
-            <div style="width:@cellCssWidth" class="info-cell">Семестр</div>
-            <div style="width:@cellCssWidth" class="info-cell">Дисциплина</div>
-            <div style="width:@cellCssWidth" class="info-cell">Учебная Группа</div>
-            <div style="width:@cellCssWidth" class="info-cell">Форма контроля</div>
-            <div style="width:@cellCssWidth" class="info-cell">Фид занятий</div>
-            <div class="info-cell info-cell-actions">Actions</div>
-        </div>
-    @if(Model.IsRenderForWorkload){
-        @foreach (var studyPlan in Model.StudyPlans)
+    <div class="box">
+        <a class="create-btn" asp-action="Create">Создать учебный план</a>
+    </div>
+
+
+    <div class="dean__content">
+        @if (Model.IsRenderForWorkload){
+             @foreach (var studyPlan in Model.StudyPlans)
         {
-                        <div class="info-row">
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.TotalHours</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.RemainingHours</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Course.Number</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Semester.Number</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Subject.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.StudyGroup.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.FormOfControl.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.TypeOfOccupation.Name</div>
-                                    <div class="info-cell info-cell-actions">
-                                            <a asp-controller="Teacher" asp-action="Index" asp-route-studyPlanId="@studyPlan.Id" class="btn btn-warning">Выбрать</a>
-                                    </div>
+                        <div class="study-item">
+                                <div class="study-item__content">
+                                         <div class="item-info"> <span class="item-info-title">Всего часов: </span> @studyPlan.TotalHours</div>
+                                             <div class="item-info"> <span class="item-info-title">Осталось часов: </span> @studyPlan.RemainingHours</div>
+                                             <div class="item-info"> <span class="item-info-title">Курс: </span> @studyPlan.Course.Number</div>
+                                             <div class="item-info"> <span class="item-info-title">Семестр: </span> @studyPlan.Semester.Number</div>
+                                             <div class="item-info"> <span class="item-info-title">Предмет: </span> @studyPlan.Subject.Name</div>
+                                             <div class="item-info"> <span class="item-info-title">Учебная группа: </span> @studyPlan.StudyGroup.Name</div>
+                                             <div class="item-info"> <span class="item-info-title">Форма контроля: </span> @studyPlan.FormOfControl.Name</div>
+                                             <div class="item-info"> <span class="item-info-title">Тип занятий: </span> @studyPlan.TypeOfOccupation.Name</div>
+                                </div>
+
+                                            <div class="study-item__actions">
+                                                            <a asp-controller="Teacher" asp-action="Index" asp-route-studyPlanId="@studyPlan.Id" class="study-select-btn">Выбрать</a>
+                                                </div>
                         </div>
         }
-    }else{
-        @foreach (var studyPlan in Model.StudyPlans)
-        {
-                        <div class="info-row">
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.TotalHours</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.RemainingHours</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Course.Number</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Semester.Number</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.Subject.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.StudyGroup.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.FormOfControl.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@studyPlan.TypeOfOccupation.Name</div>
-                                    <div class="info-cell info-cell-actions">
-                                            <a asp-action="Edit" asp-route-id="@studyPlan.Id" class="btn btn-warning">Edit</a>
-                                            <form asp-route-id="@studyPlan.Id" asp-action="Delete">
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
+        }else{
+            @foreach (var studyPlan in Model.StudyPlans)
+            {
+                                <div class="study-item">
+                                        <div class="study-item__content">
+                                                 <div class="item-info"> <span class="item-info-title">Всего часов: </span> @studyPlan.TotalHours</div>
+                                                     <div class="item-info"> <span class="item-info-title">Осталось часов: </span> @studyPlan.RemainingHours</div>
+                                                     <div class="item-info"> <span class="item-info-title">Курс: </span> @studyPlan.Course.Number</div>
+                                                     <div class="item-info"> <span class="item-info-title">Семестр: </span> @studyPlan.Semester.Number</div>
+                                                     <div class="item-info"> <span class="item-info-title">Предмет: </span> @studyPlan.Subject.Name</div>
+                                                     <div class="item-info"> <span class="item-info-title">Учебная группа: </span> @studyPlan.StudyGroup.Name</div>
+                                                     <div class="item-info"> <span class="item-info-title">Форма контроля: </span> @studyPlan.FormOfControl.Name</div>
+                                                     <div class="item-info"> <span class="item-info-title">Тип занятий: </span> @studyPlan.TypeOfOccupation.Name</div>
+                                        </div>
 
-                                    </div>
-                        </div>
+                                                    <div class="study-item__actions">
+                                                                        <a asp-action="Edit" asp-route-id="@studyPlan.Id" class="study-edit-btn edit-btn"> <span class="edit-btn-text">Изменить</span> <span class="study-edit-btn-span edit-btn-span"></span></a>
+                                                                                <form asp-route-id="@studyPlan.Id" class="study-delete-btn-form delete-btn-form" asp-action="Delete">
+                                                                                                <button type="submit" class="study-delete-btn delete-btn">  <span class="delete-btn-text">Удалить</span> <span class="study-delete-btn-span delete-btn-span"></span> </button>
+                                                        </form>
+                                                        </div>
+                                </div>
+            }
         }
-    }
-    
+       
+    </div>
+</section>
 
-</div>

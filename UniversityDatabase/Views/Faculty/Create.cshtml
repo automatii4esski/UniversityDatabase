@@ -1,37 +1,49 @@
 ﻿@model UniversityDatabase.ViewModels.Faculty.FacultyCreateViewModel
 
-<h2 class="info-title">Создать Факультет</h2>
-    <hr />
-        <form class="form form-create" method="post" asp-action="Create">
+<section class="form-section section">
+    <div class="container">
+        <div class="form-section-inner">
+            <div class="form-section-head">
+                <h1 class="form-section-title">Создать Факультет</h1>
+                <a class="form-section-back" asp-action="Index">Вернуться</a>
+            </div>
+            <form class="form form-create" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Faculty.Name" class="control-label">Название</label>
-                <input asp-for="Faculty.Name" class="form-control" />
-                <span asp-validation-for="Faculty.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Faculty.Phone" class="control-label">Телефон</label>
-                <input asp-for="Faculty.Phone" class="form-control" />
-                <span asp-validation-for="Faculty.Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Faculty.DeanId" class="control-label">Деканат</label>
-                <select class="form-select" asp-for="Faculty.DeanId">
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Название</h3>
+                    <input value="@Model.Faculty.Name" placeholder="Введите название" asp-for="Faculty.Name" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Faculty.Name" class="form-group-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Телефон</h3>
+                    <input value="@Model.Faculty.Phone" placeholder="Введите телефон" asp-for="Faculty.Phone" class="form-control" />
+                    </label>
+                <span asp-validation-for="Faculty.Phone" class="form-group-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Деканат</h3>
+                    <select class="form-control form-select" asp-for="Faculty.DeanId">
                     <option hidden selected value="">Select</option>
-                    @foreach(var dean in Model.DeansOptions){
-                        <option value="@dean.Key">@dean.Value</option>
-                    }
+
+                            @foreach (var dean in Model.DeansOptions)
+                            {
+                              <option value="@dean.Key" >@dean.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="Faculty.DeanId" class="text-danger"></span>
-            </div>
-            <div style="margin-top:10px;" class="form-group box">
-                <input type="submit" value="Create" class="btn btn-success" />
+                    </label>
+                <span asp-validation-for="Faculty.DeanId"  class="form-group-danger"></span>
+                </div>
+            <div class="form-section__submit-wrapper">
+                <button type="submit" class="form-section__submit-btn">Сохранить</button>
             </div>
         </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

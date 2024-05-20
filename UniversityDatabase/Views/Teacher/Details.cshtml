@@ -1,71 +1,173 @@
 ﻿@model UniversityDatabase.ViewModels.Teacher.TeacherDetailsViewModel;
+@using UniversityDatabase.Helpers;
 
-@{
-    string cellCssWidth = $"{100 / 7}%";
-} 
+<section class="section person">
+    <div class="container">
+        <div class="person__inner">
+           <div class="person__leftside">
+               <div class="person__photo-wrapper">
+                   <img class="person__photo"  asp-append-version="true" src="@StringHelper.GetPhotoPath(Model.Teacher.PhotoUrl)" />
+               </div>
+               <a asp-action="ChangePhoto" asp-route-id="@Model.Teacher.Id" class="person__change-photo-btn">Изменить фото</a>
+               <div class="person__actions">
+                   <a asp-route-id="@Model.Teacher.Id" asp-action="Edit" class="person__edit-btn">Редактировать данные</a>
+                   <form class="person__delete-form" asp-route-id="@Model.Teacher.Id" asp-action="Delete">
+                        <button type="submit" class="person__delete-btn">Удалить</button>
+                    </form>
+               </div>
+           </div> 
 
+           <div class="person__info">
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Имя:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.Name
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Фамилия:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.Surname
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Отчество:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.Patronymic
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Пол:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.Sex.Name
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Год рождения:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.DateOfBirthUI
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Кафедра:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.Department.Name
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Должность:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.TeacherPosition.Name
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Зарплата:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Teacher.Salary
+                   </div>
+               </div>
+           </div>
 
-<div>
-    <h2 class="info-title">О преподавателе</h2>
-    <hr />
-    <div class="box">
+           <div class="person__additional">
+               <h4 class="person__additional-title">Нагрузка</h4>
+               <div class="person__additional-wrapper">
+                    @foreach (var workload in Model.Workloads)
+                    {
+                                <div class="person__additional-item">
+                               <div class="person__additional-item-inner">
+                                   <div class="person__additional-item-info">
+                                       <div class="person__additional-item-info-title">
+                                           Предмет:
+                                        </div>
+                                        <div class="person__additional-item-info-text">
+                                        @workload.StudyPlan.Subject.Name
+                                        </div>
+                                   </div>
 
-    <a class="btn btn-primary" asp-action="Index">К списку</a>
+                                   <div class="person__additional-item-info">
+                                       <div class="person__additional-item-info-title">
+                                           Курс:
+                                        </div>
+                                        <div class="person__additional-item-info-text">
+                                        @workload.StudyPlan.Course.Number
+                                        </div>
+                                   </div>
+
+                                   <div class="person__additional-item-info">
+                                       <div class="person__additional-item-info-title">
+                                           Семестр:
+                                        </div>
+                                        <div class="person__additional-item-info-text">
+                                        @workload.StudyPlan.Semester.Number
+                                        </div>
+                                   </div>
+
+                                   <div class="person__additional-item-info">
+                                       <div class="person__additional-item-info-title">
+                                           Учебная группа:
+                                        </div>
+                                        <div class="person__additional-item-info-text">
+                                        @workload.StudyPlan.StudyGroup.Name
+                                        </div>
+                                   </div>
+
+                                   <div class="person__additional-item-info">
+                                       <div class="person__additional-item-info-title">
+                                           Вид занятий:
+                                        </div>
+                                        <div class="person__additional-item-info-text">
+                                        @workload.StudyPlan.TypeOfOccupation.Name
+                                        </div>
+                                   </div>
+
+                                   <div class="person__additional-item-info">
+                                       <div class="person__additional-item-info-title">
+                                           Форма контроля:
+                                        </div>
+                                        <div class="person__additional-item-info-text">
+                                        @workload.StudyPlan.FormOfControl.Name
+                                        </div>
+                                   </div>
+
+                                   <div class="person__additional-item-info">
+                                       <div class="person__additional-item-info-title">
+                                           Кол-во часов:
+                                        </div>
+                                        <div class="person__additional-item-info-text">
+                                        @workload.TotalHours
+                                        </div>
+                                   </div>
+                               </div>
+                               <div class="person__additional-item-actions">
+                                       <a asp-action="Edit"  asp-controller="Workload" asp-route-backUrl="@Context.Request.Path" asp-route-id="@workload.Id" class="edit-btn">
+                                           <span class="edit-btn-text">Изменить</span>
+                                           <span class="edit-btn-span"></span>
+                                       </a> 
+                                           <form asp-route-backUrl="@Context.Request.Path" asp-controller="Workload" asp-route-id="@workload.Id" asp-action="Delete">
+                                                                 <button type="submit" class="delete-btn">  <span class="delete-btn-text">Удалить</span> <span class="delete-btn-span"></span> </button>
+                                                </form>
+                               </div>
+                           </div>
+                    }
+               </div>
+           </div>
+        </div>
     </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Name</div>
-            <div style="width:@cellCssWidth" class="info-cell">Surname</div>
-            <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
-            <div style="width:@cellCssWidth" class="info-cell">Sex</div>
-            <div style="width:@cellCssWidth" class="info-cell">Age</div>
-            <div style="width:@cellCssWidth" class="info-cell">Department</div>
-            <div style="width:@cellCssWidth" class="info-cell">Salary</div>
-            <div style="width:@cellCssWidth" class="info-cell">Position</div>
-        </div>
-                    <div class="info-row">
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.Surname</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.Patronymic</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.Sex.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.Age</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.Department.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.Salary</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Teacher.TeacherPosition.Name</div>
-                    </div>
-                    <hr />
-                    <h2 class="info-title">Нагрузка</h2>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Subject</div>
-            <div style="width:@cellCssWidth" class="info-cell">Total Hours</div>
-            <div style="width:@cellCssWidth" class="info-cell">Course</div>
-            <div style="width:@cellCssWidth" class="info-cell">Study Group</div>
-            <div style="width:@cellCssWidth" class="info-cell">Semester</div>
-            <div style="width:@cellCssWidth" class="info-cell">Type of occupation</div>
-            <div style="width:@cellCssWidth" class="info-cell">Form of control</div>
-            <div class="info-cell info-cell-actions">Actions</div>
-        </div>
-        @foreach(var workload in Model.Workloads){
-                 <div class="info-row">
-                                        <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Subject.Name</div>
-                                        <div style="width:@cellCssWidth" class="info-cell">@workload.TotalHours</div>
-                                        <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.StudyGroup.Name</div>
-                                        <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Course.Number</div>
-                                        <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Semester.Number</div>
-                                        <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.TypeOfOccupation.Name</div>
-                                        <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.FormOfControl.Name</div>
-                                        <div class="info-cell info-cell-actions">
-                                           <div class="info-cell info-cell-actions">
-                                                    <a asp-action="Edit"  asp-controller="Workload" asp-route-backUrl="@Context.Request.Path" asp-route-id="@workload.Id" class="btn btn-warning">Edit</a>
-                                                <form asp-route-backUrl="@Context.Request.Path" asp-controller="Workload" asp-route-id="@workload.Id" asp-action="Delete">
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
+</section>
 
-                                    </div>
-                                </div>
-                        </div>
-        }
-                   
-
-</div>

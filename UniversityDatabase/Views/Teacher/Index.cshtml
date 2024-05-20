@@ -1,125 +1,128 @@
 ﻿@model UniversityDatabase.ViewModels.Teacher.TeacherIndexViewModel;
+@using UniversityDatabase.Helpers;
 
-@{
-    string cellCssWidth = $"{90 / 9}%";
-} 
-
-
-<div>
-    <h2 class="info-title">Преподаватели</h2>
-    <hr />
-    <form method="post" class="fx-row" asp-action="Index">
-        <input placeholder="возраст от" type="number" value="@Model.Filter.MinAge" min="0" name="minAge" />
-        <input type="hidden" name="studyPlanId" value="@Model.StudyPlanIdForWorkload" />
-        <input placeholder="возраст до" type="number" value="@Model.Filter.MaxAge" name="maxAge" />
-        <input placeholder="зарплата от" type="number" value="@Model.Filter.MinSalary" min="0" name="minSalary" />
-        <input placeholder="зарплата до" type="number" value="@Model.Filter.MaxSalary" name="maxSalary" />
-        <select class="form-select" name="departmentId">
-            <option selected value="">Кафедра</option>
-            @foreach (var item in Model.DepartmentOptions)
-            {
-                if (Model.Filter.DepartmentId == @item.Key)
-                {
-                                         <option selected value="@item.Key">@item.Value</option>
-                }
-                else
-                {
-                                            <option value="@item.Key">@item.Value</option>
-                }
-            }
-        </select>
-
-        <select class="form-select" name="sexId">
-               <option selected value="">Пол</option>
-            @foreach (var item in Model.SexOptions)
-            {
-                if (Model.Filter.SexId == @item.Key)
-                {
-                                         <option selected value="@item.Key">@item.Value</option>
-                }
-                else
-                {
-                                            <option value="@item.Key">@item.Value</option>
-                }
-            }
-        </select>
-
-        <select class="form-select" name="teacherPositionId">
-               <option selected value="">Тип</option>
-            @foreach (var item in Model.TeacherPositionOptions)
-            {
-                if (Model.Filter.TeacherPositionId == @item.Key)
-                {
-                                         <option selected value="@item.Key">@item.Value</option>
-                }
-                else
-                {
-                                            <option value="@item.Key">@item.Value</option>
-                }
-            }
-        </select>
-
-         <input type="submit" value="Применить" class="btn btn-success" />
-    </form>
-    <hr />
-    <div class="box">
-
-    <a class="btn btn-primary" asp-action="Create">Создать</a>
+<section class="teacher section">
+    <div class="section__head">
+        <h2 class="title">Преподаватели</h2>
     </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell"></div>
-            <div style="width:@cellCssWidth" class="info-cell">Name</div>
-            <div style="width:@cellCssWidth" class="info-cell">Surname</div>
-            <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
-            <div style="width:@cellCssWidth" class="info-cell">Department</div>
-            <div style="width:@cellCssWidth" class="info-cell">Salary</div>
-            <div style="width:@cellCssWidth" class="info-cell">Position</div>
-            <div style="width:@cellCssWidth" class="info-cell">Sex</div>
-            <div style="width:@cellCssWidth" class="info-cell">Age</div>
-            <div class="info-cell info-cell-actions">Actions</div>
-        </div>
-        @if(Model.StudyPlanIdForWorkload != null){
-        @foreach (var teacher in Model.Teachers)
-        {
-                            <div class="info-row">
-                                            <div style="width:@cellCssWidth" class="info-cell"><a asp-action="Details" asp-route-id="@teacher.Id" type="submit" class="btn btn-primary">О преподавателе</a></div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Department.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Salary</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.TeacherPosition.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Sex.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Age</div>
-                                        <div class="info-cell info-cell-actions">
-                                                <a asp-controller="Workload" asp-action="Create" asp-route-teacherId="@teacher.Id" asp-route-studyPlanId="@Model.StudyPlanIdForWorkload" class="btn btn-warning">Выбрать</a>
+    <div class="filter-box">
+        <form method="post" class="filter-form" asp-action="Index">
+            <div class="filter-form__inner">
+                <input type="hidden" name="studyPlanId" value="@Model.StudyPlanIdForWorkload" />
+                <div class="filter-form__group">
+                    <input class="filter-form__control" placeholder="возраст от" type="number" value="@Model.Filter.MinAge" min="0" name="minAge" />
+                </div>
+                 <div class="filter-form__group">
+                     <input class="filter-form__control" placeholder="возраст до" type="number" value="@Model.Filter.MaxAge" name="maxAge" />
+                 </div>
+
+                 <div class="filter-form__group">
+                    <input class="filter-form__control" placeholder="зарплата от" type="number" value="@Model.Filter.MinSalary" min="0" name="minSalary" />
+                </div>
+                 <div class="filter-form__group">
+                     <input class="filter-form__control" placeholder="зарплата до" type="number" value="@Model.Filter.MaxSalary" name="maxSalary" />
+                 </div>
+        <div class="filter-form__group">
+                    <select class="form-select filter-form__control" name="departmentId">
+            <option selected value="">Кафедра</option>
+                        @foreach (var item in Model.DepartmentOptions)
+                        {
+                            if (Model.Filter.DepartmentId == @item.Key)
+                            {
+                                                 <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                                    <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+        </select>
+                 </div>
+
+
+                 <div class="filter-form__group">
+                      <select class="form-select filter-form__control" name="sexId">
+               <option selected value="">Пол</option>
+                        @foreach (var item in Model.SexOptions)
+                        {
+                            if (Model.Filter.SexId == @item.Key)
+                            {
+                                                                         <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                                                            <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+        </select>
+                 </div>
+                 <div class="filter-form__group">
+                     <select class="form-select filter-form__control" name="teacherPositionId">
+               <option selected value="">Должность</option>
+                        @foreach (var item in Model.TeacherPositionOptions)
+                        {
+                            if (Model.Filter.TeacherPositionId == @item.Key)
+                            {
+                                                 <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                                    <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+        </select>
+                 </div>
+
+            </div>
+
+            <button  type="submit" class="filter-form__submit" >Применить фильтр</button>
+    </form>
+        <a class="create-btn" asp-action="Create">Создать преподавателя</a>
+    </div>
+
+
+    <div class="student__content dean__content">
+        @if (Model.StudyPlanIdForWorkload != null){
+            @foreach (var teacher in Model.Teachers)
+            {
+                                <div class="person-item">
+                                    <div class="person-item__photo-wrapper">
+                                                <img class="persont-item__photo" asp-append-version="true" src="@StringHelper.GetPhotoPath(teacher.PhotoUrl)">
+                                    </div>
+                                            <div class="person-item__content">
+                                                    <div class="person-item__name">
+                            @teacher.Name @teacher.Surname
                                         </div>
-                            </div>
-        }
+                                                 <div class="item-info"> <span class="item-info-title">Кафедра: </span> @teacher.Department.Name</div>
+                                                 <div class="item-info"> <span class="item-info-title">Возраст: </span> @teacher.Age</div>
+                                                 <div class="item-info"> <span class="item-info-title">Пол: </span> @teacher.Sex.Name</div>
+                                            </div>
+
+
+                                                                 <a class="person-item__details" asp-controller="Workload" asp-action="Create" asp-route-teacherId="@teacher.Id" asp-route-studyPlanId="@Model.StudyPlanIdForWorkload">Выбрать</a>
+                                </div>
+            }
         }else{
-        @foreach (var teacher in Model.Teachers)
-        {
-                            <div class="info-row">
-                                        <div style="width:@cellCssWidth" class="info-cell"><a asp-action="Details" asp-route-id="@teacher.Id" type="submit" class="btn btn-primary">О преподавателе</a></div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Surname</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Patronymic</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Department.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Salary</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.TeacherPosition.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Sex.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@teacher.Age</div>
-                                        <div class="info-cell info-cell-actions">
-                                                <a asp-action="Edit" asp-route-id="@teacher.Id" class="btn btn-warning">Edit</a>
-                                                <form asp-route-id="@teacher.Id" asp-action="Delete">
-                                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
-
+            @foreach (var teacher in Model.Teachers)
+            {
+                                <div class="person-item">
+                                    <div class="person-item__photo-wrapper">
+                                                <img class="persont-item__photo" asp-append-version="true" src="@StringHelper.GetPhotoPath(teacher.PhotoUrl)">
+                                    </div>
+                                            <div class="person-item__content">
+                                                    <div class="person-item__name">
+                            @teacher.Name @teacher.Surname
                                         </div>
-                            </div>
-        }
-        }
-   
+                                                 <div class="item-info"> <span class="item-info-title">Кафедра: </span> @teacher.Department.Name</div>
+                                                 <div class="item-info"> <span class="item-info-title">Возраст: </span> @teacher.Age</div>
+                                                 <div class="item-info"> <span class="item-info-title">Пол: </span> @teacher.Sex.Name</div>
+                                            </div>
 
-</div>
+
+                                                         <a class="person-item__details" asp-action="Details" asp-route-id="@teacher.Id">Подробнее</a>
+                                </div>
+            }
+        }
+        
+    </div>
+</section>

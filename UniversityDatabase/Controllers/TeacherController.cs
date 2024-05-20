@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting.Internal;
 using NuGet.DependencyResolver;
 using UniversityDatabase.Data;
 using UniversityDatabase.Filters;
+using UniversityDatabase.Helpers;
 using UniversityDatabase.Models;
 using UniversityDatabase.Seed;
 using UniversityDatabase.ViewModels.Student;
@@ -13,10 +15,12 @@ namespace UniversityDatabase.Controllers
     public class TeacherController : Controller
     {
         private MyDbContext _dbContext;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public TeacherController(MyDbContext dbContext)
+        public TeacherController(MyDbContext dbContext, IWebHostEnvironment hostingEnvironment)
         {
             _dbContext = dbContext;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         private TeacherIndexViewModel GetIndexViewModelWithOptions()
@@ -44,6 +48,7 @@ namespace UniversityDatabase.Controllers
                 TeacherPosition = new TeacherPosition { Name = t.TeacherPosition.Name },
                 Department = new Department { Name = t.Department.Name },
                 DateOfBirth = t.DateOfBirth,
+                PhotoUrl = t.PhotoUrl,
             }).ToList();
 
             var teacherViewModel = GetIndexViewModelWithOptions();
@@ -71,6 +76,7 @@ namespace UniversityDatabase.Controllers
                 TeacherPositionId = t.TeacherPositionId,
                 DepartmentId = t.DepartmentId,
                 SexId = t.SexId,
+                PhotoUrl = t.PhotoUrl,
                 Department = new Department { Name = t.Department.Name },
                 DateOfBirth = t.DateOfBirth,
             }).AsEnumerable();
@@ -99,6 +105,7 @@ namespace UniversityDatabase.Controllers
                 Patronymic = t.Patronymic,
                 Sex = new Sex { Name = t.Sex.Name },
                 Salary = t.Salary,
+                PhotoUrl = t.PhotoUrl,
                 TeacherPosition = new TeacherPosition { Name = t.TeacherPosition.Name },
                 Department = new Department { Name = t.Department.Name },
                 DateOfBirth = t.DateOfBirth,
@@ -150,11 +157,14 @@ namespace UniversityDatabase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Teacher teacher)
+        public ActionResult Create(TeacherCreateViewModel viewModel)
         {
             try
             {
-                _dbContext.Teachers.Add(teacher);
+                string? photoName = FileHelper.SavePhoto(_hostingEnvironment, viewModel.Photo);
+                viewModel.Teacher.PhotoUrl = photoName;
+
+                _dbContext.Teachers.Add(viewModel.Teacher);
                 _dbContext.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
@@ -164,6 +174,40 @@ namespace UniversityDatabase.Controllers
 
                 TempData["error"] = e.Message;
                 return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public ActionResult ChangePhoto(int id)
+        {
+            var viewModel = new TeacherChangePhotoViewModel { TeacherId = id };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePhoto(TeacherChangePhotoViewModel viewModel)
+        {
+            try
+            {
+                var photoName = FileHelper.SavePhoto(_hostingEnvironment, viewModel.Photo);
+
+                var teacher = _dbContext.Teachers.First(t => t.Id == viewModel.TeacherId);
+
+                FileHelper.DeletePhoto(_hostingEnvironment, teacher.PhotoUrl);
+
+                teacher.PhotoUrl = photoName;
+
+                _dbContext.Teachers.Update(teacher);
+
+                _dbContext.SaveChanges();
+
+                return RedirectToAction(nameof(Details), new { id = viewModel.TeacherId });
+            }
+            catch (Exception e)
+            {
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Details), new { id = viewModel.TeacherId });
             }
         }
 
@@ -205,13 +249,13 @@ namespace UniversityDatabase.Controllers
                 _dbContext.Teachers.Update(teacher);
                 _dbContext.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new {id = teacher.Id});
             }
             catch (Exception e)
             {
 
                 TempData["error"] = e.Message;
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = teacher.Id });
             }
         }
 
@@ -222,6 +266,19 @@ namespace UniversityDatabase.Controllers
             try
             {
                 var teacher = _dbContext.Teachers.First(t => t.Id == id);
+                var workloads = _dbContext.Workloads.Where(w => w.TeacherId == id).ToList();
+
+                foreach(var workload in workloads)
+                {
+                    var studyPlan = _dbContext.StudyPlans.First(s => s.Id == workload.StudyPlanId);
+                    studyPlan.RemainingHours += workload.TotalHours;
+
+                    _dbContext.StudyPlans.Update(studyPlan);
+                }
+
+                _dbContext.Workloads.RemoveRange(workloads);
+
+                FileHelper.DeletePhoto(_hostingEnvironment, teacher.PhotoUrl);
 
                 _dbContext.Teachers.Remove(teacher);
                 _dbContext.SaveChanges();

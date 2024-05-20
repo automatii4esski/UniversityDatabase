@@ -1,116 +1,116 @@
 ﻿@model UniversityDatabase.ViewModels.Workload.WorkloadIndexViewModel;
 
-@{
-    string cellCssWidth = $"{90 / 10}%";
-} 
 
-
-<div>
-    <h2 class="info-title">Нагрузка преподавателей</h2>
-    <hr />
-    <form method="post" class="fx-row" asp-action="Index">
-        <select class="form-select" name="courseId">
-            <option selected value="">Курс</option>
-            @foreach (var item in Model.CourseOptions)
-            {
-                if (Model.Filter.CourseId == @item.Key)
-                {
-                                                 <option selected value="@item.Key">@item.Value</option>
-                }
-                else
-                {
-                                                    <option value="@item.Key">@item.Value</option>
-                }
-            }
-        </select>
-
-        <select class="form-select" name="semesterId">
-            <option selected value="">Семестр</option>
-            @foreach (var item in Model.SemesterOptions)
-            {
-                if (Model.Filter.SemesterId == @item.Key)
-                {
-                                                         <option selected value="@item.Key">@item.Value</option>
-                }
-                else
-                {
-                                                            <option value="@item.Key">@item.Value</option>
-                }
-            }
-        </select>
-
-        <select class="form-select" name="typeOfOccupationId">
-            <option selected value="">Вид занятий</option>
-            @foreach (var item in Model.TypeOfOccupationOptions)
-            {
-                if (Model.Filter.TypeOfOccupationId == @item.Key)
-                {
-                                                                 <option selected value="@item.Key">@item.Value</option>
-                }
-                else
-                {
-                                                                    <option value="@item.Key">@item.Value</option>
-                }
-            }
-        </select>
-
-         <select class="form-select" name="studyGroupId">
-            <option selected value="">Учебная группа</option>
-            @foreach (var item in Model.StudyGroupOptions)
-            {
-                if (Model.Filter.StudyGroupId == @item.Key)
-                {
-                                                                 <option selected value="@item.Key">@item.Value</option>
-                }
-                else
-                {
-                                                                    <option value="@item.Key">@item.Value</option>
-                }
-            }
-        </select>
-
-         <input type="submit" value="Применить" class="btn btn-success" />
-    </form>
-    <hr />
-    <div class="box">
-
-    <a class="btn btn-primary" asp-controller="StudyPlan" asp-route-isRenderForWorkload="true" asp-action="Index">Создать</a>
+<section class="department section">
+    <div class="section__head">
+        <h2 class="title">Нагрузка преподавателей</h2>
     </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Name</div>
-            <div style="width:@cellCssWidth" class="info-cell">Surname</div>
-            <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
-            <div style="width:@cellCssWidth" class="info-cell">Subject</div>
-            <div style="width:@cellCssWidth" class="info-cell">Total Hours</div>
-            <div style="width:@cellCssWidth" class="info-cell">Course</div>
-            <div style="width:@cellCssWidth" class="info-cell">Study Group</div>
-            <div style="width:@cellCssWidth" class="info-cell">Semester</div>
-            <div style="width:@cellCssWidth" class="info-cell">Type of occupation</div>
-            <div style="width:@cellCssWidth" class="info-cell">Form of control</div>
-            <div class="info-cell info-cell-actions">Actions</div>
-        </div>
-    @foreach (var workload in Model.Workloads)
-    {
-                    <div class="info-row">
-                            <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Surname</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Patronymic</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Subject.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@workload.TotalHours</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Course.Number</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.StudyGroup.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.Semester.Number</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.TypeOfOccupation.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@workload.StudyPlan.FormOfControl.Name</div>
-                                <div class="info-cell info-cell-actions">
-                                        <a asp-action="Edit" asp-route-id="@workload.Id" class="btn btn-warning">Edit</a>
-                                        <form asp-route-id="@workload.Id" asp-action="Delete">
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
+    <div class="filter-box">
+        <form method="post" class="filter-form" asp-action="Index">
+            <div class="filter-form__inner">
+        <div class="filter-form__group">
+                    <select class="form-select filter-form__control" name="courseId">
+            <option selected value="">Курс</option>
+                        @foreach (var item in Model.CourseOptions)
+                        {
+                            if (Model.Filter.CourseId == @item.Key)
+                            {
+                                                         <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                                            <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+        </select>
+                 </div>
 
-                                </div>
-                    </div>
-    }
 
-</div>
+                 <div class="filter-form__group">
+                      <select class="form-select filter-form__control" name="semesterId">
+               <option selected value="">Семестр</option>
+                        @foreach (var item in Model.SemesterOptions)
+                        {
+                            if (Model.Filter.SemesterId == @item.Key)
+                            {
+                                                                 <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                                                    <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+        </select>
+                 </div>
+                 <div class="filter-form__group">
+                     <select class="form-select filter-form__control" name="typeOfOccupationId">
+               <option selected value="">Вид занятий</option>
+                        @foreach (var item in Model.TypeOfOccupationOptions)
+                        {
+                            if (Model.Filter.TypeOfOccupationId == @item.Key)
+                            {
+                                                                         <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                                                            <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+        </select>
+                 </div>
+
+
+        <div class="filter-form__group">
+                     <select class="form-select filter-form__control" name="studyGroupId">
+               <option selected value="">Учебная группа</option>
+                        @foreach (var item in Model.StudyGroupOptions)
+                        {
+                            if (Model.Filter.StudyGroupId == @item.Key)
+                            {
+                                                                         <option selected value="@item.Key">@item.Value</option>
+                            }
+                            else
+                            {
+                                                                            <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+        </select>
+                 </div>
+
+            </div>
+
+            <button  type="submit" class="filter-form__submit" >Применить фильтр</button>
+    </form>
+        <a class="create-btn" asp-controller="StudyPlan" asp-route-isRenderForWorkload="true" asp-action="Index">Создать нагрузку</a>
+    </div>
+
+
+    <div class="dean__content">
+        @foreach (var workload in Model.Workloads)
+        {
+                     <div class="study-item grade-item">
+                              <div class="study-item__content">
+                                      <div class="item-info"> <span class="item-info-title">Имя: </span> @workload.Teacher.Name</div>
+                                         <div class="item-info"> <span class="item-info-title">Фамилия: </span>@workload.Teacher.Surname</div>
+                                                   <div class="item-info"> <span class="item-info-title">Отчество: </span> @workload.Teacher.Patronymic</div>
+                                                         <div class="item-info"> <span class="item-info-title">Предмет: </span>@workload.StudyPlan.Subject.Name</div>
+                                                   <div class="item-info"> <span class="item-info-title">Кол-во часов: </span> @workload.TotalHours</div>
+                                                   <div class="item-info"> <span class="item-info-title">Курс: </span> @workload.StudyPlan.Course.Number</div>
+                                                          <div class="item-info"> <span class="item-info-title">Семестр: </span> @workload.StudyPlan.Semester.Number</div>
+                                                          <div class="item-info"> <span class="item-info-title">Учебная группа: </span> @workload.StudyPlan.StudyGroup.Name</div>
+                                                              <div class="item-info"> <span class="item-info-title">Тип занятий: </span> @workload.StudyPlan.TypeOfOccupation.Name</div>
+                                                                  <div class="item-info"> <span class="item-info-title">Форма контроля: </span> @workload.StudyPlan.FormOfControl.Name</div>
+                                                    </div>
+
+                                                    <div class="study-item__actions">
+                                                                            <a asp-action="Edit" asp-route-id="@workload.Id" class="study-edit-btn edit-btn"> <span class="edit-btn-text">Изменить</span> <span class="study-edit-btn-span edit-btn-span"></span></a>
+                                                                                    <form asp-route-id="@workload.Id" class="study-delete-btn-form delete-btn-form" asp-action="Delete">
+                                                                                                    <button type="submit" class="study-delete-btn delete-btn">  <span class="delete-btn-text">Удалить</span> <span class="study-delete-btn-span delete-btn-span"></span> </button>
+                                                            </form>
+                                                            </div>
+                                            </div>
+        }
+
+    </div>
+</section>
+

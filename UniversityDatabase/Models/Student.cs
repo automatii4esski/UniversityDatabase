@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using UniversityDatabase.Config;
+using UniversityDatabase.Helpers;
 
 namespace UniversityDatabase.Models
 {
@@ -26,6 +26,10 @@ namespace UniversityDatabase.Models
         [Required]
         public string Patronymic { get; set; } = "";
 
+        [Column("parent")]
+        [Required]
+        public string Parent { get; set; } = "";
+
         [Column("date_of_birth", TypeName = "DATE")]
         [Required]
         public DateTime DateOfBirth { get; set; }
@@ -36,6 +40,9 @@ namespace UniversityDatabase.Models
         [Column("sex_id")]
         public byte SexId { get; set; }
         public virtual Sex Sex { get; set; }
+
+        [Column("photo_url")]
+        public string? PhotoUrl { get; set; }
 
         [Column("study_group_id")]
         public int StudyGroupId { get; set; }

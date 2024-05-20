@@ -158,8 +158,12 @@ namespace UniversityDatabase.Controllers
             try
             {
                 var studyPlan = _dbContext.StudyPlans.First(s=> s.Id == id);
+                var studentGrades = _dbContext.StudentGrades.Where(s => s.StudyPlanId == id);
+                var workloads = _dbContext.Workloads.Where(s => s.StudyPlanId == id);
 
                 _dbContext.StudyPlans.Remove(studyPlan);
+                _dbContext.StudentGrades.RemoveRange(studentGrades);
+                _dbContext.Workloads.RemoveRange(workloads);
                 _dbContext.SaveChanges();
 
                 return RedirectToAction(nameof(Index));

@@ -1,92 +1,75 @@
 ﻿@model UniversityDatabase.ViewModels.Workload.WorkloadCreateViewModel;
+@using UniversityDatabase.Helpers;
 
-@{
-    string cellCssWidth = $"{100 / 8}%";
-} 
-<h2 class="info-title">Установить нагрузку для преподавателя (в часах)</h2>
-<hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Всего часов</div>
-            <div style="width:@cellCssWidth" class="info-cell">Нераспределенные часы</div>
-            <div style="width:@cellCssWidth" class="info-cell">Курс</div>
-            <div style="width:@cellCssWidth" class="info-cell">Семестр</div>
-            <div style="width:@cellCssWidth" class="info-cell">Предмет</div>
-            <div style="width:@cellCssWidth" class="info-cell">Учебная группа</div>
-            <div style="width:@cellCssWidth" class="info-cell">Форма контроля</div>
-            <div style="width:@cellCssWidth" class="info-cell">Вид занятий</div>
-        </div>
-        <div class="info-row">
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.TotalHours</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.RemainingHours</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.Course.Number</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.Semester.Number</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.Subject.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.StudyGroup.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.FormOfControl.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.StudyPlan.TypeOfOccupation.Name</div>
-                    </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Имя</div>
-            <div style="width:@cellCssWidth" class="info-cell">Фамилия</div>
-            <div style="width:@cellCssWidth" class="info-cell">Отчество</div>
-        </div>
-        <div class="info-row">
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.Teacher.Name</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.Teacher.Surname</div>
-                                <div style="width:@cellCssWidth" class="info-cell">@Model.Workload.Teacher.Patronymic</div>
-                    </div>
-                    <hr />
-        <form class="form form-create" asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<section class="form-section section">
+    <div class="container">
+        <div class="form-section-inner">
+            <div class="form-section-head">
+                <h1 class="form-section-title">Установить нагрузку</h1>
+                <a class="form-section-back" asp-action="Index">Вернуться</a>
+            </div>
+            <form class="form form-create" asp-action="Create">
             <input type="hidden" asp-for="Workload.TeacherId" value="@Model.Workload.TeacherId" />
             <input type="hidden" asp-for="Workload.StudyPlanId" value="@Model.Workload.StudyPlanId" />
-            <div class="form-group">
-                <label asp-for="Workload.TotalHours" class="control-label">Нагрузка (в часах)</label>
-                <input max="@Model.Workload.StudyPlan.RemainingHours"  asp-for="Workload.TotalHours" class="form-control" />
-                <span asp-validation-for="Workload.TotalHours" class="text-danger"></span>
-            </div>
-
-            <div style="margin-top:10px;" class="form-group box">
-                <input type="submit" value="Create" class="btn btn-success" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Нагрузка (в часах)</h3>
+                            <input max="@Model.Workload.StudyPlan.RemainingHours"  asp-for="Workload.TotalHours" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Workload.TotalHours" class="form-group-danger"></span>
+                </div>
+               
+            <div class="form-section__submit-wrapper">
+                <button type="submit" class="form-section__submit-btn">Сохранить</button>
             </div>
         </form>
+        </div>
+    </div>
+</section>
 
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@if (Model.OtherWorkloads.Count() > 0)
-{
-                         <hr />
-                        <h2 class="info-title">Другие назначенные нагрузки для этого учебного плана</h2>
-                <hr />
-                    <div class="info-row info-row-title">
-                            <div style="width:@cellCssWidth" class="info-cell">Имя</div>
-                            <div style="width:@cellCssWidth" class="info-cell">Фамилия</div>
-                            <div style="width:@cellCssWidth" class="info-cell">Отчество</div>
-                            <div style="width:@cellCssWidth" class="info-cell">Кол-во часов</div>
-                            <div style="width:@cellCssWidth" class="info-cell">Действия</div>
-                        </div>
-    @foreach (var workload in Model.OtherWorkloads)
-    {
-                                 <div class="info-row">
-                                                            <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Name</div>
-                                                                        <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Surname</div>
-                                                                        <div style="width:@cellCssWidth" class="info-cell">@workload.Teacher.Patronymic</div>
-                                                                    <div style="width:@cellCssWidth" class="info-cell">@workload.TotalHours</div>
-                                                                            <div class="info-cell info-cell-actions">
-                                                <a asp-action="Edit" asp-route-id="@workload.Id" class="btn btn-warning">Edit</a>
-                                                        <form asp-route-isRedirectBack="true" asp-route-id="@workload.Id" asp-action="Delete">
-                                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>
-
+<section class="workload">
+    <div class="container">
+        <div class="workload__inner">
+            <div class="workload__teacher">
+                <h3 class="workload__title workload__title--teacher">Преподаватель</h3>
+                <div class="person-item">
+                                    <div class="person-item__photo-wrapper">
+                                                <img class="persont-item__photo" asp-append-version="true" src="@StringHelper.GetPhotoPath(Model.Workload.Teacher.PhotoUrl)">
+                                    </div>
+                                            <div class="person-item__content">
+                                                    <div class="person-item__name">
+                            @Model.Workload.Teacher.Name @Model.Workload.Teacher.Surname
                                         </div>
+                                                 <div class="item-info"> <span class="item-info-title">Кафедра: </span> @Model.Workload.Teacher.Department.Name</div>
+                                                 <div class="item-info"> <span class="item-info-title">Возраст: </span> @Model.Workload.Teacher.Age</div>
+                                                 <div class="item-info"> <span class="item-info-title">Пол: </span> @Model.Workload.Teacher.Sex.Name</div>
+                                                 
+                                            </div>
+                                            <a class="person-item__details" asp-controller="Teacher" asp-action="Details" asp-route-id="@Model.Workload.Teacher.Id">Подробнее</a>
+                 </div>
+            </div>
+             <div class="workload__studyplan">
+                <h3 class="workload__title">Учебный план</h3>
+                 <div class="study-item grade-item">
+                              <div class="study-item__content">
+                                      <div class="item-info"> <span class="item-info-title">Всего часов: </span>@Model.Workload.StudyPlan.TotalHours</div>
+                                         <div class="item-info"> <span class="item-info-title">Нераспределенные часы: </span>@Model.Workload.StudyPlan.RemainingHours</div>
+                                                   <div class="item-info"> <span class="item-info-title">Курс: </span> @Model.Workload.StudyPlan.Course.Number</div>
+                                                         <div class="item-info"> <span class="item-info-title">Семестр: </span>@Model.Workload.StudyPlan.Semester.Number</div>
+                                                   <div class="item-info"> <span class="item-info-title">Предмет: </span> @Model.Workload.StudyPlan.Subject.Name</div>
+                                                   <div class="item-info"> <span class="item-info-title">Учебная группа: </span> @Model.Workload.StudyPlan.StudyGroup.Name</div>
+                                                   <div class="item-info"> <span class="item-info-title">Форма контроля: </span> @Model.Workload.StudyPlan.FormOfControl.Name</div>
+                                                   <div class="item-info"> <span class="item-info-title">Вид занятий: </span> @Model.Workload.StudyPlan.TypeOfOccupation.Name</div>
                                                     </div>
-    }
+                                            </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-}
+
+
 
 @section Scripts {
     @{

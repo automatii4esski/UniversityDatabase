@@ -123,7 +123,10 @@ namespace UniversityDatabase.Controllers
                 Id = t.Id,
                 Name= t.Name,
                 Surname = t.Surname,
-                Patronymic = t.Patronymic,
+                Department = t.Department,
+                DateOfBirth = t.DateOfBirth,
+                Sex = t.Sex,
+                PhotoUrl = t.PhotoUrl
             }).FirstOrDefault(t => t.Id == teacherId);
 
             if(teacher == null || studyPlan == null)
@@ -208,6 +211,10 @@ namespace UniversityDatabase.Controllers
                     Name = t.Name,
                     Surname = t.Surname,
                     Patronymic = t.Patronymic,
+                    Department = t.Department,
+                    DateOfBirth = t.DateOfBirth,
+                    Sex = t.Sex,
+                    PhotoUrl = t.PhotoUrl
                 }).FirstOrDefault(t => t.Id == workload.TeacherId);
 
                 if (studyPlan == null || teacher == null) throw new Exception("No studyplan or teacher");

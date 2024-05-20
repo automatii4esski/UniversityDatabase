@@ -1,0 +1,35 @@
+﻿@model UniversityDatabase.ViewModels.Teacher.TeacherChangePhotoViewModel;
+
+<section class="form-section section">
+    <div class="container">
+        <div class="form-section-inner">
+            <div class="form-section-head">
+                <h1 class="form-section-title">Редактировать Фото Преподавателя</h1>
+                <a class="form-section-back" asp-action="Details" asp-route-id="@Model.TeacherId">Вернуться</a>
+            </div>
+
+            <form class="form form-create" enctype="multipart/form-data" asp-action="ChangePhoto">
+             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TeacherId" />
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Фото</h3>
+                                    <input accept="image/*"   asp-for="Photo" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Photo" class="form-group-danger"></span>
+                </div>
+
+            <div class="form-section__submit-wrapper">
+                <button type="submit" class="form-section__submit-btn">Сохранить</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

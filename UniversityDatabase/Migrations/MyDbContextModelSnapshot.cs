@@ -202,10 +202,19 @@ namespace UniversityDatabase.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("name");
 
+                    b.Property<string>("Parent")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("parent");
+
                     b.Property<string>("Patronymic")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("patronymic");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("longtext")
+                        .HasColumnName("photo_url");
 
                     b.Property<byte>("SexId")
                         .HasColumnType("tinyint unsigned")
@@ -389,6 +398,10 @@ namespace UniversityDatabase.Migrations
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("patronymic");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasColumnType("longtext")
+                        .HasColumnName("photo_url");
 
                     b.Property<int>("Salary")
                         .HasColumnType("int")

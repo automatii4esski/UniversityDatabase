@@ -1,40 +1,44 @@
 ﻿@model UniversityDatabase.ViewModels.StudyGroup.StudyGroupIndexViewModel;
 
-@{
-    string cellCssWidth = $"{90 / 4}%";
-} 
 
-
-<div>
-    <h2 class="info-title">Учебные группы</h2>
-    <hr />
-    <div class="box">
-
-    <a class="btn btn-primary" asp-action="Create">Создать</a>
+<section class="department section">
+    <div class="section__head">
+        <h2 class="title">Учебные группы</h2>
     </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Name</div>
-            <div style="width:@cellCssWidth" class="info-cell">Course</div>
-            <div style="width:@cellCssWidth" class="info-cell">RecruitmentYear</div>
-            <div style="width:@cellCssWidth" class="info-cell">Faculty</div>
-            <div class="info-cell info-cell-actions">Actions</div>
-        </div>
-    @foreach (var studyGroup in Model.StudyGroups)
-    {
-                <div class="info-row">
-                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.Name</div>
-                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.Course.Number</div>
-                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.RecruitmentYear</div>
-                        <div style="width:@cellCssWidth" class="info-cell">@studyGroup.Faculty.Name</div>
-                            <div class="info-cell info-cell-actions">
-                                    <a asp-action="Edit" asp-route-id="@studyGroup.Id" class="btn btn-warning">Edit</a>
-                                    <form asp-route-id="@studyGroup.Id" asp-action="Delete">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
+    <div class="box">
+        <a class="create-btn" asp-action="Create">Создать учебную группу</a>
+    </div>
 
+
+    <div class="dean__content">
+        @foreach (var studyGroup in Model.StudyGroups)
+        {
+                    <div class="study-item">
+                            <div class="study-item__content">
+                                    <h3 class="study-item__title">@studyGroup.Name</h3>
+                                        
+                                            <div class="item-info"> <span class="item-info-title">Деканат: </span> @studyGroup.Faculty.Dean.Name</div>
+                                        <div class="item-info"> <span class="item-info-title">Факультет: </span> @studyGroup.Faculty.Name</div>
+                                            <div class="study-item__info">
+                                                <div class="study-item__info-item">
+                                                            <div class="study-item__info-item-text">@studyGroup.Course.Number</div>
+                                                            <div class="study-item__info-item-title">Курс</div>
+                                            </div> 
+                                                <div class="study-item__info-item">
+                                                            <div class="study-item__info-item-text">@studyGroup.RecruitmentYear</div>
+                                                            <div class="study-item__info-item-title">Год набора</div>
+                                                </div> 
+                                            </div>
                             </div>
-                </div>
-    }
+                                
+                                        <div class="study-item__actions">
+                                                        <a asp-action="Edit" asp-route-id="@studyGroup.Id" class="study-edit-btn edit-btn"> <span class="edit-btn-text">Изменить</span> <span class="study-edit-btn-span edit-btn-span"></span></a>
+                                                                <form asp-route-id="@studyGroup.Id" class="study-delete-btn-form delete-btn-form" asp-action="Delete">
+                                                                                    <button type="submit" class="study-delete-btn delete-btn">  <span class="delete-btn-text">Удалить</span> <span class="study-delete-btn-span delete-btn-span"></span> </button>
+                                            </form>
+                                            </div>
+                    </div>
+        }
+    </div>
+</section>
 
-</div>

@@ -1,35 +1,30 @@
 ﻿@model UniversityDatabase.ViewModels.Dean.DeanIndexViewModel;
 
-@{
-    string cellCssWidth = $"{90/2}%";
-} 
 
-
-<div>
-    <h2 class="info-title">Деканаты</h2>
-    <hr />
-    <div class="box">
-
-    <a class="btn btn-primary" asp-action="Create">Создать</a>
+<section class="dean section">
+    <div class="section__head">
+        <h2 class="title">Деканаты</h2>
     </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Name</div>
-            <div style="width:@cellCssWidth" class="info-cell">Phone</div>
-            <div class="info-cell info-cell-actions">Actions</div>
-        </div>
-    @foreach(Dean dean in Model.Deans){
-        <div class="info-row">
-                <div style="width:@cellCssWidth" class="info-cell">@dean.Name</div>
-                <div style="width:@cellCssWidth" class="info-cell">@dean.Phone</div>
-                    <div class="info-cell info-cell-actions">
-                            <a asp-action="Edit" asp-route-id="@dean.Id" class="btn btn-warning">Edit</a>
-                            <form asp-route-id="@dean.Id" asp-action="Delete">
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                                
-                    </div>
-        </div>
-    }
-    
-</div>
+    <div class="box">
+        <a class="create-btn" asp-action="Create">Создать деканат</a>
+    </div>
+        
+
+    <div class="dean__content">
+        @foreach (Dean dean in Model.Deans)
+        {
+            <div class="item">
+                <h3 class="item-title">
+                    @dean.Name
+                </h3>
+                    <div class="item-info"> <span class="item-info-title">Телефон: </span> @dean.Phone</div>
+                    <div class="item-actions">
+                                <a asp-action="Edit" asp-route-id="@dean.Id" class="edit-btn"> <span class="edit-btn-text">Изменить</span> <span class="edit-btn-span"></span></a>
+                                    <form asp-route-id="@dean.Id" asp-action="Delete">
+                                                            <button type="submit" class="delete-btn">  <span class="delete-btn-text">Удалить</span> <span class="delete-btn-span"></span> </button>
+                                    </form>
+                                    </div>
+            </div>
+        }
+    </div>
+</section>

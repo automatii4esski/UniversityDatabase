@@ -1,59 +1,146 @@
 ﻿@model UniversityDatabase.ViewModels.Student.StudentDetailsViewModel;
+@using UniversityDatabase.Helpers;
 
-@{
-    string cellCssWidth = $"{100 / 7}%";
-} 
+<section class="section person">
+    <div class="container">
+        <div class="person__inner">
+           <div class="person__leftside">
+               <div class="person__photo-wrapper">
+                   <img class="person__photo"  asp-append-version="true" src="@StringHelper.GetPhotoPath(Model.Student.PhotoUrl)" />
+               </div>
+               <a asp-action="ChangePhoto" asp-route-id="@Model.Student.Id" class="person__change-photo-btn">Изменить фото</a>
+               <div class="person__actions">
+                   <a asp-route-id="@Model.Student.Id" asp-action="Edit" class="person__edit-btn">Редактировать данные</a>
+                   <form class="person__delete-form" asp-route-id="@Model.Student.Id" asp-action="Delete">
+                        <button type="submit" class="person__delete-btn">Удалить</button>
+                    </form>
+               </div>
+           </div> 
 
+           <div class="person__info">
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Имя:
+                   </div>
+                   <div class="person__info-text">
+                       @Model.Student.Name
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Фамилия:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Student.Surname
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Отчество:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Student.Patronymic
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Пол:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Student.Sex.Name
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Год рождения:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Student.DateOfBirthUI
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Учебная группа:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Student.StudyGroup.Name
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Курс:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Student.StudyGroup.Course.Number
+                   </div>
+               </div>
+               <div class="person__info-item">
+                   <div class="person__info-title">
+                       Факультет:
+                   </div>
+                   <div class="person__info-text">
+                        @Model.Student.StudyGroup.Faculty.Name
+                   </div>
+               </div>
+           </div>
 
-<div>
-    <h2 class="info-title">О студенте</h2>
-    <hr />
-    <div class="box">
+           <div class="person__additional">
+               <h4 class="person__additional-title">Оценки</h4>
+               <div class="person__additional-wrapper">
+                    @foreach (var grade in Model.StudentGrades)
+                    {
+                            <div class="person__additional-item">
+                           <div class="person__additional-item-inner">
+                               <div class="person__additional-item-info">
+                                   <div class="person__additional-item-info-title">
+                                       Предмет:
+                                    </div>
+                                    <div class="person__additional-item-info-text">
+                                        @grade.StudyPlan.Subject.Name
+                                    </div>
+                               </div>
 
-    <a class="btn btn-primary" asp-action="Index">К списку</a>
+                               <div class="person__additional-item-info">
+                                   <div class="person__additional-item-info-title">
+                                       Курс:
+                                    </div>
+                                    <div class="person__additional-item-info-text">
+                                        @grade.StudyPlan.Course.Number
+                                    </div>
+                               </div>
+
+                               <div class="person__additional-item-info">
+                                   <div class="person__additional-item-info-title">
+                                       Семестр:
+                                    </div>
+                                    <div class="person__additional-item-info-text">
+                                        @grade.StudyPlan.Semester.Number
+                                    </div>
+                               </div>
+
+                               <div class="person__additional-item-info">
+                                   <div class="person__additional-item-info-title">
+                                       Оценка:
+                                    </div>
+                                    <div class="person__additional-item-info-text">
+                                        @grade.GradeValue.Value
+                                    </div>
+                               </div>
+                           </div>
+                           <div class="person__additional-item-actions">
+                               <a asp-controller="StudentGrade" asp-action="Edit" asp-route-backUrl="@Context.Request.Path" asp-route-id="@grade.Id" class="edit-btn">
+                                       <span class="edit-btn-text">Установить оценку</span>
+                                       <span class="edit-btn-span"></span>
+                                   </a> 
+                           </div>
+                       </div>
+                    }
+               </div>
+           </div>
+        </div>
     </div>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Name</div>
-            <div style="width:@cellCssWidth" class="info-cell">Surname</div>
-            <div style="width:@cellCssWidth" class="info-cell">Patronomyc</div>
-            <div style="width:@cellCssWidth" class="info-cell">Study Group</div>
-            <div style="width:@cellCssWidth" class="info-cell">Sex</div>
-            <div style="width:@cellCssWidth" class="info-cell">Age</div>
-            <div style="width:@cellCssWidth" class="info-cell">Course</div>
-            <div style="width:@cellCssWidth" class="info-cell">Faculty</div>
-        </div>
-                    <div class="info-row">
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Surname</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Patronymic</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.StudyGroup.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Sex.Name</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.Age</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.StudyGroup.Course.Number</div>
-                            <div style="width:@cellCssWidth" class="info-cell">@Model.Student.StudyGroup.Faculty.Name</div>
-                    </div>
-                    <hr />
-                    <h2 class="info-title">Оценки</h2>
-    <hr />
-    <div class="info-row info-row-title">
-            <div style="width:@cellCssWidth" class="info-cell">Курс</div>
-            <div style="width:@cellCssWidth" class="info-cell">Семестр</div>
-            <div style="width:@cellCssWidth" class="info-cell">Предмет</div>
-            <div style="width:@cellCssWidth" class="info-cell">Оценка</div>
-            <div class="info-cell info-cell-actions">Actions</div>
-        </div>
-        @foreach(var grade in Model.StudentGrades){
-                 <div class="info-row">
-                                    <div style="width:@cellCssWidth" class="info-cell">@grade.StudyPlan.Course.Number</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@grade.StudyPlan.Semester.Number</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@grade.StudyPlan.Subject.Name</div>
-                                    <div style="width:@cellCssWidth" class="info-cell">@grade.Grade</div>
-                                        <div class="info-cell info-cell-actions">
-                                        <a asp-controller="StudentGrade" asp-action="Edit" asp-route-backUrl="@Context.Request.Path" asp-route-id="@grade.Id" class="btn btn-warning">Установить оценку</a>
-                                </div>
-                        </div>
-        }
-                   
+</section>
 
-</div>
+
+
+

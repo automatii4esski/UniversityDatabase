@@ -1,4 +1,4 @@
-﻿using UniversityDatabase.Config;
+﻿using UniversityDatabase.Helpers;
 using UniversityDatabase.Models;
 
 namespace UniversityDatabase.Filters

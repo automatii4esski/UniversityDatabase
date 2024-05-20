@@ -18,7 +18,7 @@ namespace UniversityDatabase.Controllers
 
         public ActionResult Index()
         {
-            var facultyList = _dbContext.Faculties.ToList();
+            var facultyList = _dbContext.Faculties.Include(f => f.Dean).ToList();
 
             var facultyViewModel = new FacultyIndexViewModel { Faculties = facultyList };
 

@@ -1,86 +1,121 @@
 ﻿@model UniversityDatabase.ViewModels.Teacher.TeacherCreateViewModel;
 
-<h2 class="info-title">Создать Преподавателя</h2>
-    <hr />
-        <form class="form form-create" asp-action="Create">
+<section class="form-section section">
+    <div class="container">
+        <div class="form-section-inner">
+            <div class="form-section-head">
+                <h1 class="form-section-title">Создать Преподавателя</h1>
+                <a class="form-section-back" asp-action="Index">Вернуться</a>
+            </div>
+
+            <form class="form form-create" enctype="multipart/form-data" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Teacher.Name" class="control-label">Имя</label>
-                <input  asp-for="Teacher.Name" class="form-control" />
-                <span asp-validation-for="Teacher.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Teacher.Surname" class="control-label">Фамилия</label>
-                <input asp-for="Teacher.Surname" class="form-control" />
-                <span asp-validation-for="Teacher.Surname" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="Teacher.Patronymic" class="control-label">Отчество</label>
-                <input asp-for="Teacher.Patronymic" class="form-control" />
-                <span asp-validation-for="Teacher.Patronymic" class="text-danger"></span>
-            </div>
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Имя</h3>
+                    <input value="@Model.Teacher.Name" placeholder="Введите имя" asp-for="Teacher.Name" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Teacher.Name" class="form-group-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Teacher.Salary" class="control-label">Зарплата</label>
-                <input type="number" min="0" asp-for="Teacher.Salary" class="form-control" />
-                <span asp-validation-for="Teacher.Salary" class="text-danger"></span>
-            </div>
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Фамилия</h3>
+                    <input value="@Model.Teacher.Surname" placeholder="Введите фамилию" asp-for="Teacher.Surname" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Teacher.Surname" class="form-group-danger"></span>
+                </div>
 
-            <div class="form-group">
-                         <div class="control-label">Пол
-                        <br />
-                        @foreach (var sex in Model.SexOptions)
-                        {
-                                      <label asp-for="Teacher.SexId" class="control-label">
-                                      @sex.Value
-                                               <input asp-for="Teacher.SexId" value="@sex.Key" type="radio"/>
-                                  </label>
-                        }
-                        </div>
-                <span asp-validation-for="Teacher.SexId" class="text-danger"></span>
-            </div>
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Отчество</h3>
+                    <input value="@Model.Teacher.Patronymic" placeholder="Введите отчество" asp-for="Teacher.Patronymic" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Teacher.Patronymic" class="form-group-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Teacher.DateOfBirth" class="control-label">Дата рождения</label>
-                <input value="@(new DateTime(DateTime.Now.Year - 18, 1, 1).ToString("yyyy-MM-dd"))" type="date" asp-for="Teacher.DateOfBirth" class="form-control" />
-                <span asp-validation-for="Teacher.DateOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Teacher.TeacherPositionId" class="control-label">Позиция</label>
-                <select class="form-select" asp-for="Teacher.TeacherPositionId">
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Пол</h3>
+                            <div class="form-group__radio-wrapper">
+                            @foreach (var sex in Model.SexOptions)
+                            {
+                                              <label class="form-group__radio-label">
+                                    @sex.Value
+                                                       <input asp-for="Teacher.SexId" value="@sex.Key" type="radio"/>
+                                          </label>
+                            }
+                            </div>
+
+                    </label>
+                <span asp-validation-for="Teacher.SexId"  class="form-group-danger"></span>
+                </div>
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Зарплата</h3>
+                    <input type="number" min="0" asp-for="Teacher.Salary" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Teacher.Salary" class="form-group-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Дата рождения</h3>
+                                    <input value="@(new DateTime(DateTime.Now.Year - 18, 1, 1).ToString("yyyy-MM-dd"))" type="date" asp-for="Teacher.DateOfBirth" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Teacher.DateOfBirth" class="form-group-danger"></span>
+                </div>
+
+                 <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Должность</h3>
+                <select class="form-select form-control" asp-for="Teacher.TeacherPositionId">
                     <option hidden selected value="">Select</option>
 
-            @foreach (var teacherPosition in Model.TeacherPositionOptions)
-            {
+                            @foreach (var teacherPosition in Model.TeacherPositionOptions)
+                            {
 
-                        <option value="@teacherPosition.Key" >@teacherPosition.Value</option>
-            }
+                            <option value="@teacherPosition.Key" >@teacherPosition.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="Teacher.TeacherPositionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Teacher.DepartmentId" class="control-label">Кафедра</label>
-                <select class="form-select" asp-for="Teacher.DepartmentId">
+                    </label>
+                    <span asp-validation-for="Teacher.TeacherPositionId" class="form-group-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Кафедра</h3>
+                <select class="form-select form-control" asp-for="Teacher.DepartmentId">
                     <option hidden selected value="">Select</option>
 
-            @foreach (var department in Model.DepartmentOptions)
-            {
+                            @foreach (var department in Model.DepartmentOptions)
+                            {
 
-                <option value="@department.Key" >@department.Value</option>
-            }
+                    <option value="@department.Key" >@department.Value</option>
+                            }
                 </select>
-                <span asp-validation-for="Teacher.DepartmentId" class="text-danger"></span>
-            </div>
+                    </label>
+                    <span asp-validation-for="Teacher.DepartmentId" class="form-group-danger"></span>
+                </div>
 
-            <div style="margin-top:10px;" class="form-group box">
-                <input type="submit" value="Create" class="btn btn-success" />
+                <div class="form-group">
+                    <label class="form-group__label">
+                        <h3 class="form-group__title">Фото</h3>
+                                    <input accept="image/*"   asp-for="Photo" class="form-control" />
+                    </label>
+                    <span asp-validation-for="Photo" class="form-group-danger"></span>
+                </div>
+
+
+            <div class="form-section__submit-wrapper">
+                <button type="submit" class="form-section__submit-btn">Сохранить</button>
             </div>
         </form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     @{

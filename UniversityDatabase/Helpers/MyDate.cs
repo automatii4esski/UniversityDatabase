@@ -1,4 +1,4 @@
-﻿namespace UniversityDatabase.Config
+﻿namespace UniversityDatabase.Helpers
 {
     public static class MyDate
     {
